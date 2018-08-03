@@ -10,7 +10,7 @@ class PurchaseItem{
         this.computePrice();
     }
 
-    static deserializJson(val){
+    static deserializeJson(val){
         let ot = new PurchaseItem(val.packQuantity,val.packPrice);
         ot.code=val.code;
         ot.price=val.price;
@@ -94,14 +94,16 @@ class Purchase{
 
     increaseQuantity(index){
         let result=this.items[index];
-        updateItemQuantity(index,result.quantity+1);
+        this.updateItemQuantity(index,result.quantity+1);
+        return result;
     }
 
     decreaseQuantity(index){
         let result=this.items[index];
         if(result.quantity>0){
-          updateItemQuantity(index,result.quantity-1);
+            this.updateItemQuantity(index,result.quantity-1);
         }
+        return result;
     }
 
     updateItemQuantity(index,quantity){

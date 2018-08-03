@@ -138,10 +138,6 @@ function searchPurchase(purchaseNumber){
 
 function searchPurchaseFound(purchaseParam){
     purchaseStore.currentPurchase=purchaseParam;
-    if(purchaseStore.currentPurchase.status!="open"){
-        closedTotalPaid.innerHTML="&#8369;"+purchaseStore.currentPurchase.totalPaid;
-        closedTotalChange.innerHTML="&#8369;"+purchaseStore.currentPurchase.totalChange;
-    }
     resetGui();
 }
 
