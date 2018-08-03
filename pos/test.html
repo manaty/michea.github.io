@@ -1,0 +1,24 @@
+<html>
+    <script>
+class PurchaseItem{
+    construtor(a,b){
+        this.quantity=1;
+        this.price=packPrice;
+        this.packQuantity=packQuantity;
+        this.packPrice=packPrice;
+    }
+
+    static deserializeJson(val){
+        let ot = new PurchaseItem(1,2);
+        ot.code=val.code;
+        ot.price=val.price;
+        ot.quantity= val.quantity;
+        ot.description=val.description;
+        return ot;
+    }
+
+}
+
+var toto=PurchaseItem.deserializeJson({code:"toto"});
+    </script>
+</html>

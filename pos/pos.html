@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Michea Pos</title>
+  <style>
+html, body {
+  height: 90%;
+}
+
+.action-td{
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+}
+
+.action-td > button {
+  margin: 0px 10px 0px 10px;
+}
+
+#paymentDiv > div > div {
+  margin: 0px 10px 0px 10px;
+}
+
+.billContainer {
+ background-size: 100%;
+ background-position:center;
+ background-repeat:no-repeat;
+ flex:1;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ padding:10px;
+}
+
+.billContainer > div {
+    color: yellow;
+    margin:10px;
+    text-align: center;
+    text-shadow: -2px -2px 2px rgba(0,0,0,1) , 2px 2px 2px rgba(0,0,0,1) ;
+}
+
+
+  </style>
+  <script src="lib/DataStore.js"></script>
+  <script src="lib/ProductStore.js"></script>
+  <script src="lib/OrderStore.js"></script>
+  <script src="lib/PurchaseStore.js"></script>
+</head>
+<body style="display: flex;flex-direction: column">
+ <div style="display:flex;flex:0">
+                <div id="dateTime"></div>
+                <div style="margin-left:10px"><a href="catalog.html">Catalog</a></div>
+                <div style="margin-left:10px"><a href="orders.html">Orders</a></div>
+                <div style="margin-left:10px"><a href="purchases.html">Purchases</a></div>
+                <div style="flex:1;margin-left:10px"><input type="text" placeholder="Search Order" id="orderSearch"/></div>
+                <div style="margin-left:10px" id="accountDiv"></div>
+ </div>       
+<div style="display: flex;flex:1;">
+<div style="display: flex;flex-direction: column;flex:1">
+    <div>
+        <label for="productNumber">Scan barcode</label>
+        <input id="productNumber"   placeholder="00001" 
+        oninput="productCodeChanged(this.value)" onfocus="this.value=''"/>
+    </div>
+    <div>
+        <label for="manualProductNumber">Manual barcode</label>
+        <input id="manualProductNumber"   placeholder="00001" 
+        onchanged="productCodeChanged(this.value)" onfocus="this.value=''"/>
+    </div>
+    <button onclick="payOrder()" id="paymentButton" style="flex:1;margin:5px;background-color: blue;color:white;display:block">Payment</button>
+    <button onclick="cancelOrder()" id="cancelOrderButton" style="flex:1;margin:5px;background-color: red;color:white;display:block">Cancel Order</button>
+    <div id="paymentDiv" style="flex:4;display: flex;flex-direction: column;visibility: hidden;">
+      <div id="bills" style="display: flex;flex:1" >
+            <div onclick="registerPaymentRecord('bill',1000)" class="billContainer" style="background-image: url('./img/1000php.jpg')">
+                <div id="bill1000">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('bill',500)" class="billContainer" style="background-image: url('./img/500php.jpeg')">
+                <div id="bill500">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('bill',200)" class="billContainer" style="background-image: url('./img/200php.jpeg')">
+                <div id="bill200">0</div>
+            </div>
+      </div>
+      <div id="bills2" style="display: flex;flex:1" >
+            <div onclick="registerPaymentRecord('bill',100)" class="billContainer" style="background-image: url('./img/100php.jpg')">
+                <div id="bill100">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('bill',50)" class="billContainer" style="background-image: url('./img/50php.jpeg')">
+                <div id="bill50">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('bill',20)" class="billContainer" style="background-image: url('./img/20php.jpg')">
+                <div id="bill20">0</div>
+            </div>
+                        
+      </div>
+      <div id="coins" style="display: flex;flex:1">
+            <div onclick="registerPaymentRecord('coin',10)" class="billContainer" style="background-image: url('./img/10coin.jpg')">
+                <div id="coin10">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('coin',5)" class="billContainer" style="background-image: url('./img/5coin.jpg')">
+                <div id="coin5">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('coin',1)" class="billContainer" style="background-image: url('./img/1coin.jpg')">
+                <div id="coin1">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('coin',0.25)" class="billContainer" style="background-size: 80%;background-image: url('./img/.25coin.jpg')">
+                <div id="coin0.25">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('coin',0.05)" class="billContainer" style="background-size: 80%;background-image: url('./img/.05coin.jpg')">
+                <div id="coin0.05">0</div>
+            </div>
+            <div onclick="registerPaymentRecord('coin',0.01)" class="billContainer" style="background-size: 80%;background-image: url('./img/.01coin.jpg')">
+                <div id="coin0.01">0</div>
+            </div>
+      </div>
+      <div style="flex:1">
+        <span style="font-weight: bold">Total paid :&#8369;</span>
+        <input id="totalPaid" value="0.00"></span>
+      </div>
+      <div style="flex:1">
+        <span style="font-weight: bold">Change</span>
+        <span id="totalChange" style="font-weight: bold">&#8369;0.00</span>
+      </div>
+      <div style="flex:1">
+          <button onclick="undoPaymentRecord()" id="undoPaymentButton" style="">Undo</button>
+          <button onclick="resetPaymentRecords()" id="resetPaymentButton">Reset</button>
+      </div>
+      <div>
+          <button onclick="printReceipt()" id="printReceiptButton" style="display:none;"> Print Receipt </button>
+      </div>
+    </div>
+
+</div>
+<div style="flex: 1">
+    <table class="order_header">
+            <tr>
+                <td class="desc-td" style="font-weight: bold">Order# :</td>
+                <td id="orderNumber" style="font-weight: bold"></td>
+            </tr>
+            <tr id="cancelledOrderNumberTR">
+                <td class="desc-td" style="font-weight: bold">Cancelled# :</td>
+                <td id="cancelledOrderNumber" style="font-weight: bold"></td>
+            </tr>
+    </table>
+    <table class="price_table">
+      <thead>
+        <tr style="font-weight: bold">
+            <th class="code-td">Code</th>
+            <th class="desc-td">Description</th>
+            <th class="unit-td">Unit price</th>
+            <th class="qty-td" style="font-weight: bold">Quantity</th>
+            <th  class="price-td" style="font-weight: bold">Amount</th>
+            <th>Action</th>
+        </tr>
+      </thead>
+      <tbody  id="cart">
+
+      </tbody>
+    </table>
+    
+    <br/>
+    <table class="price_table">
+        <tr>
+            <td class="desc-td" style="font-weight: bold">Total price</td>
+            <td id="totalPrice" class="price-td" style="font-weight: bold">&#8369;0.00</td>
+        </tr>
+        <tr id="closedTotalPaidTR" style="display:none">
+            <td class="desc-td" style="font-weight: bold">Amount paid</td>
+            <td id="closedTotalPaid" class="price-td" style="font-weight: bold">&#8369;0.00</td>
+        </tr>
+        <tr  id="closedTotalChangeTR" style="display:none">
+            <td class="desc-td" style="font-weight: bold">Change given</td>
+            <td id="closedTotalChange" class="price-td" style="font-weight: bold">&#8369;0.00</td>
+        </tr>
+    </table>
+    </div>
+</div>
+</div>
+
+<script src="pos.js"></script>
+</body>
+</html>

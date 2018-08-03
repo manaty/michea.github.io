@@ -1,0 +1,3 @@
+- use indexedDB to store catalog, inventory  and orders
+- syncronize storage on github https://medium.freecodecamp.org/pushing-a-list-of-files-to-the-github-with-javascript-b724c8c09b66
+- make it a progressive webapp and add barcode scanning (https://github.com/code-kotis/barcode-scanner/)

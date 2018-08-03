@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Michea Pos</title>
+  <style>
+html, body {
+  height: 90%;
+}
+
+.action-td{
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+}
+
+.action-td > button {
+  margin: 0px 10px 0px 10px;
+}
+
+#paymentDiv > div > div {
+  margin: 0px 10px 0px 10px;
+}
+
+.billContainer {
+ background-size: 100%;
+ background-position:center;
+ background-repeat:no-repeat;
+ flex:1;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ padding:10px;
+}
+
+.billContainer > div {
+    color: yellow;
+    margin:10px;
+    text-align: center;
+    text-shadow: -2px -2px 2px rgba(0,0,0,1) , 2px 2px 2px rgba(0,0,0,1) ;
+}
+
+
+  </style>
+  <script src="lib/DataStore.js"></script>
+  <script src="lib/ProductStore.js"></script>
+  <script src="lib/PurchaseStore.js"></script>
+</head>
+<body style="display: flex;flex-direction: column">
+ <div style="display:flex;flex:0">
+                <div id="dateTime"></div>
+                <div style="margin-left:10px"><a href="pos.html">POS</a></div>
+                <div style="margin-left:10px"><a href="catalog.html">Catalog</a></div>
+                <div style="margin-left:10px"><a href="orders.html">Orders</a></div>
+                <div style="margin-left:10px"><a href="purchases.html">Purchases</a></div>
+                <div style="flex:1;margin-left:10px"><input type="text" placeholder="Search Purchase" id="purchaseSearch"/></div>
+                 <div style="margin-left:10px" id="accountDiv"></div>
+ </div>       
+<div style="display: flex;flex:1;">
+<div style="display: flex;flex-direction: column;flex:1">
+    <div>
+        <label for="productNumber">Scan barcode</label>
+        <input id="productNumber"   placeholder="00001" 
+        oninput="productCodeChanged(this.value)" onfocus="this.value=''"/>
+    </div>
+    <div>
+        <label for="manualProductNumber">Manual barcode</label>
+        <input id="manualProductNumber"   placeholder="00001" 
+        onchanged="productCodeChanged(this.value)" onfocus="this.value=''"/>
+    </div>
+    <button onclick="closePurchase()" id="closeButton" style="flex:1;margin:5px;background-color: blue;color:white;display:block">Close purchase</button>
+    <button onclick="cancelPurchase()" id="cancelPurchaseButton" style="flex:1;margin:5px;background-color: red;color:white;display:block">Cancel Purchase</button>
+
+</div>
+<div style="flex: 1">
+    <table class="purchase_header">
+            <tr>
+                <td class="desc-td" style="font-weight: bold">Purchase# :</td>
+                <td id="purchaseNumber" style="font-weight: bold"></td>
+            </tr>
+            <tr id="cancelledPurchaseNumberTR">
+                <td class="desc-td" style="font-weight: bold">Cancelled# :</td>
+                <td id="cancelledPurchaseNumber" style="font-weight: bold"></td>
+            </tr>
+    </table>
+    <table class="price_table">
+      <thead>
+        <tr style="font-weight: bold">
+            <th class="code-td">Code</th>
+            <th class="desc-td">Description</th>
+            <th class="unit-td">Unit price</th>
+            <th class="qty-td" style="font-weight: bold">Quantity</th>
+            <th  class="price-td" style="font-weight: bold">Amount</th>
+            <th>Action</th>
+        </tr>
+      </thead>
+      <tbody  id="cart">
+
+      </tbody>
+    </table>
+    
+    <br/>
+    <table class="price_table">
+        <tr>
+            <td class="desc-td" style="font-weight: bold">Total price</td>
+            <td id="totalPrice" class="price-td" style="font-weight: bold">&#8369;0.00</td>
+        </tr>
+    </table>
+    </div>
+</div>
+</div>
+
+<script src="newPurchase.js"></script>
+</body>
+</html>
