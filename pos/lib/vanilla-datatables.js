@@ -4,7 +4,6 @@
  * Licensed under MIT (http://www.opensource.org/licenses/mit-license.php)
  *
  * Version: 2.0.0-beta.1
- *
  */
 (function(root, factory) {
     var plugin = "DataTable";
