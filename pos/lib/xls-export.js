@@ -103,11 +103,11 @@ class XlsExport {
     const colsHead = Object.keys(this._data[0]).map(key => [key]).join(';');
     const colsData = this._data.map(obj => [ // obj === row
       Object.keys(obj).map(function(col){
-        if(col=="code"){
-          return '="'+obj.code+'"';
-        } else  {
+        //if(col=="code"){
+        //  return '="'+obj.code+'"';
+        //} else  {
           return obj[col]
-        }
+        //}
          // row[column]
       }).join(';'), // join the row with ';'
     ]).join('\n'); // end of row
