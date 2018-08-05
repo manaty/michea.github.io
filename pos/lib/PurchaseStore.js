@@ -39,7 +39,7 @@ class PurchaseItem{
     }
 
     computePrice(){
-        this.price = +(Math.round(this.packPrice*this.quantity*this.packQuantity+ "e+2")  + "e-2");
+        this.price = +(Math.round(this.packPrice*this.quantity+ "e+2")  + "e-2");
     }
 }
 
@@ -276,6 +276,7 @@ class PurchaseStore{
             purchase.status="open";
             purchaseStore.put(purchaseToClose);
             purchaseStore.put(purchase);
+            inventoryStore.cancelPurchase(purchaseToClose);
             return purchase;
         } else {
             throw "Too late to cancel the purchase";

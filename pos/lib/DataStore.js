@@ -10,7 +10,7 @@ class DataStore{
 
     openDatabase(callback){
         console.log("openDatabase");
-        let request = window.indexedDB.open(this.dbName,5);
+        let request = window.indexedDB.open(this.dbName,9);
         request.onupgradeneeded = (function() {
             console.log("create/upgrade db");
           this.database = request.result;
@@ -20,6 +20,7 @@ class DataStore{
                 console.log("create "+store.name+" store");
               let dbstrore=this.database.createObjectStore(store.name, {keyPath: store.keyPath});
             }{
+                //this.database.deleteObjectStore(store.name);
                 console.log("store "+store.name+" was already present in db");  
             }
           }

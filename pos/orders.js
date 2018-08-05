@@ -1,5 +1,6 @@
 var dataStore = new DataStore("micheapos");
 var orderStore = new OrderStore(dataStore);
+var inventoryStore = new InventoryStore(dataStore);
 dataStore.openDatabase(init);
 
 function init(){

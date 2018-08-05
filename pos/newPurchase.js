@@ -29,6 +29,7 @@ var closeButton=document.getElementById('closeButton');
 var dataStore = new DataStore("micheapos");
 var productStore = new ProductStore(dataStore);
 var purchaseStore = new PurchaseStore(dataStore);
+var inventoryStore = new InventoryStore(dataStore);
 dataStore.openDatabase(init);
 
 
@@ -158,7 +159,9 @@ function cancelPurchase(){
         if(((new Date()) - purchaseStore.currentPurchase.date) < 3600000){
         let c = confirm("Cancel this purchase and create new one ?");
             if (c== true) {
+                let im=inventoryStore.cancelPurchase(purchaseStore.currentPurchase);
                 purchaseStore.currentPurchase = purchaseStore.cancelPurchase(purchaseStore.currentPurchase);
+                productStore.registerInventoryMovement(im);
                 resetGui();
             }
        } else {
@@ -275,6 +278,8 @@ function productNotFoundCallback(productCode){
   function closePurchase(){
     if(purchaseStore.currentPurchase.status=="open"){
         purchaseStore.closePurchase();
+        let im=inventoryStore.registerPurchase(purchaseStore.currentPurchase);
+        productStore.registerInventoryMovement(im);
     }
     newPurchase();
     return true;

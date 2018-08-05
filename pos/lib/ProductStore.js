@@ -1,13 +1,18 @@
 class Product{
-    constructor(code,description,unitPrice,buyingPrice){
+    constructor(code,description,unitPrice,stockQuantity){
         this.code=code;
         this.description=description;
-        this.unitPrice=unitPrice;
+        this.unitPrice=+(Math.round(unitPrice+ "e+2")  + "e-2");
+        this.stockQuantity=isNaN(stockQuantity)?0:+(Math.round(stockQuantity+ "e+2")  + "e-2");
         this.creationDate=new Date();
+        console.log(Product.toRow(this).join(" "));
     }
-
+    
+    static fromObject(val){
+        return new Product(val.code,val.description,val.unitPrice,val.stockQuantity);
+    }
     static toRow(product){
-        return [product.code,product.description,product.unitPrice,product.creationDate]
+        return [product.code,product.description,product.unitPrice,product.stockQuantity,product.creationDate]
     }
 }
 
@@ -67,7 +72,9 @@ class ProductStore {
             if(productRequest.result){
                 foundcallback(productRequest.result);
             } else {
-                notfoundcallback(productCode);
+                if(notfoundcallback){
+                    notfoundcallback(productCode);
+                }
             }
         };
         productRequest.onerror=function(event){
@@ -75,8 +82,32 @@ class ProductStore {
         };
     }
 
-    addProduct(code,description,unitPrice,callback){
-        let product = new Product(code,description,unitPrice);
+    storeProductArray(products,callback){
+        let transaction = this.dataStore.database.transaction(this.name,'readwrite');
+        let productStore = transaction.objectStore(this.name);
+        var i=0,successes=0,errors=0;
+        putNext();
+        function putNext() {
+            if (i<products.length) {
+                let p=Product.fromObject(products[i]);
+                i++;
+                if((!p.code)||(p.code.length<4)||isNaN(p.unitPrice)){
+                    errors++;
+                    putNext();
+                } else {
+                    productStore.put(p).onsuccess = putNext;
+                    successes++;
+                }
+            } else {
+                console.log('update complete');
+                if(callback){
+                    callback(successes,errors);
+                }
+            }
+        }           
+    }
+
+    storeProduct(product,callback){
         let transaction = this.dataStore.database.transaction(this.name,'readwrite');
         let productStore = transaction.objectStore(this.name);
         let productRequest=productStore.put(product);
@@ -89,6 +120,14 @@ class ProductStore {
         productRequest.onerror=function(){
                 console.log("error while storing the product: "+productRequest.error);
         };
+        return product;
+    }
+
+    addProduct(code,description,unitPrice,stockQuantity,callback){
+        if(isNaN(unitPrice)){throw "invalid unit price";}
+        if(isNaN(stockQuantity)){throw "invalid stock quantity";}
+        let product = new Product(code,description,unitPrice,stockQuantity);
+        this.storeProduct(product,callback);
         return product;
     }
 
@@ -109,5 +148,14 @@ class ProductStore {
         productRequest.onerror=function(){
                 console.log("error while deleting the product: "+productRequest.error);
         };
+    }
+
+    registerInventoryMovement(inventoryMovement){
+        for(var item of inventoryMovement.items){
+            this.lookup(item.code,(function(product){
+                product.stockQuantity+=item.quantityDelta;
+                this.storeProduct(product);
+            }).bind(this))
+        }
     }
 }

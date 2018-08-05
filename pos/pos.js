@@ -37,6 +37,7 @@ var dataStore = new DataStore("micheapos");
 var productStore = new ProductStore(dataStore);
 var orderStore = new OrderStore(dataStore);
 var purchaseStore = new PurchaseStore(dataStore);
+var inventoryStore = new InventoryStore(dataStore);
 dataStore.openDatabase(init);
 
 
@@ -171,7 +172,9 @@ function cancelOrder(){
         if(((new Date()) - orderStore.currentOrder.date) < 3600000){
         let c = confirm("Cancel this order and create new one ?");
             if (c== true) {
+                let im=inventoryStore.cancelOrder(orderStore.currentOrder);
                 orderStore.currentOrder = orderStore.cancelOrder(orderStore.currentOrder);
+                productStore.registerInventoryMovement(im);
                 resetGui();
             }
        } else {
@@ -335,6 +338,8 @@ function productNotFoundCallback(productCode){
   function printReceipt(){
     paymentDiv.style.visibility='hidden';
     orderStore.closeOrder(orderStore.currentOrder);
+    let im=inventoryStore.registerOrder(orderStore.currentOrder);
+    productStore.registerInventoryMovement(im);
     var mywindow = window.open('', 'PRINT', 'height=400,width=200');
     mywindow.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"/>');
     mywindow.document.write('<title>Receipt '+orderStore.currentOrder.orderNumber+'</title>');
