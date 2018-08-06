@@ -235,3 +235,33 @@ function excelExport(products){
     xls.exportToCSV(filename);
     return true;
 }
+
+function printPriceTags(){
+    console.log(table);
+    //take the rows appearing in the table (all pages)
+    let rows=table.rows().instance.searchData;
+    if((rows) && (rows.length>0)){
+        var mywindow = window.open('', 'PRINT', 'height=400,width=200');
+        mywindow.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"/>');
+        mywindow.document.write('<link rel="stylesheet" type="text/css" href="css/pricetags.css">');
+        mywindow.document.write('<script src="lib/JsBarcode.min.js"></script>');
+        mywindow.document.write('</head><body>');
+        let i=0;
+        for(let row of rows){
+            mywindow.document.write('<table class="tag_table">');
+            mywindow.document.write('<tr><td colspan="2" class="desc_td">'+row.cells[1].content+'</td></tr>');
+            mywindow.document.write('<tr><td><img id="barcode'+i+'"  style="width:80%;height:16mm"/></td><td class="price_td">&#8369;'+row.cells[2].content+'</td></tr>');
+            mywindow.document.write('</table>');
+            mywindow.document.write('<script>JsBarcode("#barcode'+i+'", '+row.cells[0].content+',{format: "CODE128",width:2,');
+            mywindow.document.write('height:30,displayValue: false });</script>')
+            i++;
+        }
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10*/
+        mywindow.print();
+        mywindow.close();
+        return true;
+    } else {
+        alert("Please first filter the products to print");
+    }
+}

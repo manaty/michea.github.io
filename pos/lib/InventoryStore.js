@@ -58,12 +58,34 @@ class InventoryMovement{
         return im;
     }
 
+    static fromCancelledOrder(order){
+        let im=null;
+        if(order.items){
+            im = new InventoryMovement(order.orderNumber,"O");
+            for(var item of order.items){
+                im.addItem(item,item.quantity); // cancelling increases the quantity
+            }
+        }
+        return im;
+    }
+
     static fromPurchase(purchase){
         let im=null;
         if(purchase.items){
             im = new InventoryMovement(purchase.purchaseNumber,"P");
             for(var item of purchase.items){
                 im.addItem(item,item.quantity); // buying increases the quantity
+            }
+        }
+        return im;
+    }
+    
+    static fromCancelledPurchase(purchase){
+        let im=null;
+        if(purchase.items){
+            im = new InventoryMovement(purchase.purchaseNumber,"P");
+            for(var item of purchase.items){
+                im.addItem(item,item.quantity*(-1)); // buying increases the quantity
             }
         }
         return im;
@@ -258,7 +280,7 @@ class InventoryStore{
     }
 
     cancelOrder(order){
-        let im=InventoryMovement.fromPurchase(order); //we buy what we sold
+        let im=InventoryMovement.fromCancelledOrder(order);
         this.storeInventory(im);
         return im;
     }
@@ -270,7 +292,7 @@ class InventoryStore{
     }
 
     cancelPurchase(purchase){
-        let im=InventoryMovement.fromOrder(purchase); //we sell what we bought
+        let im=InventoryMovement.fromCancelledPurchase(purchase);
         this.storeInventory(im);
         return im;
     }
