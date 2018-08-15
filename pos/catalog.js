@@ -117,19 +117,19 @@ function createProductTable(rows){
         }
        },
        data:{
-        headings:["Code","Description","Unit price","Stock quantity","Creation date"],
+        headings:["Code","Description","Unit price","Stock quantity","Category","Creation date"],
            data:rows}
     });
     table.on("editable.save.cell",function(oldValue,newValue,row){
         console.log("editable.save.cell "+oldValue+ " new="+newValue+" row="+row);
-        productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].content);
+        productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].content,row.cells[4].content);
     });
     table.on("editable.save.row",function(oldValue,row){
         if(row.cells[0].content==oldValue.cells[0].content){
-            productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].content);
+            productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].content,row.cells[4].content);
         } else {
             productStore.deleteProduct(oldValue.cells[0].content,function(){
-                productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].content);
+                productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].conten,row.cells[4].content);
             })
         }
     });
@@ -201,12 +201,13 @@ function productNotFoundCallback(productCode){
         let sq=prompt(description+"quantity in stock","1");
         let stockQuantity=+(Math.round(sq+ "e+2")  + "e-2");
         console.log("stockQuantity ="+stockQuantity);
-        productStore.addProduct(productCode,description,unitPrice,stockQuantity,productStoredCallback);
+        let category=undefined;
+        productStore.addProduct(productCode,description,unitPrice,stockQuantity,category,productStoredCallback);
 }
 
 function productStoredCallback(product){
+    table.rows().add(Product.toRow(product));
     alert('product added');
-    location.reload(); 
 }
 
 function productListDownload(products){

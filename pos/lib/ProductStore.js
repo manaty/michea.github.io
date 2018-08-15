@@ -1,18 +1,20 @@
 class Product{
-    constructor(code,description,unitPrice,stockQuantity){
+    constructor(code,description,unitPrice,stockQuantity,category,order){
         this.code=code;
         this.description=description;
         this.unitPrice=+(Math.round(unitPrice+ "e+2")  + "e-2");
         this.stockQuantity=isNaN(stockQuantity)?0:+(Math.round(stockQuantity+ "e+2")  + "e-2");
         this.creationDate=new Date();
+        this.category=category;
+        this.order=order;
         console.log(Product.toRow(this).join(" "));
     }
     
     static fromObject(val){
-        return new Product(val.code,val.description,val.unitPrice,val.stockQuantity);
+        return new Product(val.code,val.description,val.unitPrice,val.stockQuantity,val.category,val.order);
     }
     static toRow(product){
-        return [product.code,product.description,product.unitPrice,product.stockQuantity,product.creationDate]
+        return [product.code,product.description,product.unitPrice,product.stockQuantity,product.category,product.creationDate]
     }
 }
 
@@ -41,6 +43,10 @@ class ProductStore {
                 callback(products);
             }
         };
+    }
+
+    listByCatetogry(category,callback){
+        
     }
     
     listProductAsRows(callback){
@@ -123,10 +129,10 @@ class ProductStore {
         return product;
     }
 
-    addProduct(code,description,unitPrice,stockQuantity,callback){
+    addProduct(code,description,unitPrice,stockQuantity,category,callback){
         if(isNaN(unitPrice)){throw "invalid unit price";}
         if(isNaN(stockQuantity)){throw "invalid stock quantity";}
-        let product = new Product(code,description,unitPrice,stockQuantity);
+        let product = new Product(code,description,unitPrice,stockQuantity,category,0);
         this.storeProduct(product,callback);
         return product;
     }
