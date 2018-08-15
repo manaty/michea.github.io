@@ -129,7 +129,7 @@ function createProductTable(rows){
             productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].content,row.cells[4].content);
         } else {
             productStore.deleteProduct(oldValue.cells[0].content,function(){
-                productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].conten,row.cells[4].content);
+                productStore.addProduct(row.cells[0].content,row.cells[1].content,row.cells[2].content,row.cells[3].content,row.cells[4].content);
             })
         }
     });
