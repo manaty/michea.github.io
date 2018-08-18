@@ -300,6 +300,7 @@ class OrderStore{
 
     closeOrder(order,callback){
         order.status="paid";
+        order.date= new Date();
         let transaction = this.dataStore.database.transaction(this.name,'readwrite');
         let orderStore = transaction.objectStore(this.name);
         let orderRequest=orderStore.put(order);
