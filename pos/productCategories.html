@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>Product Catalog</title>
+  <title>Product Categories</title>
   <style>
       body {
   background-color: #efefef;
@@ -111,7 +111,7 @@ input[type="text"] {
   <link rel="stylesheet" type="text/css" href="./css/vanilla-dataTables.css"/>
   <link href="./css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
   <script src="./lib/DataStore.js"></script>
-  <script src="./lib/ProductStore.js"></script> 
+  <script src="./lib/ProductCategoryStore.js"></script> 
   <script src="./lib/vanilla-datatables.js"></script> 
   <script src="./lib/xls-export.js"></script> 
   <script src="./lib/papaparse.min.js"></script> 
@@ -119,26 +119,25 @@ input[type="text"] {
 <body>
     <div style="display:flex;">
       <div style="margin-left:10px"><a href="index.html">POS</a></div>
-      <div style="margin-left:10px"><a href="productCategories.html">Categories</a></div>
+      <div style="margin-left:10px"><a href="catalog.html">Catalog</a></div>
     </div>
 
     <div>
-      <label for="productNumber">Add product</label>
-      <input id="productNumber"   placeholder="00001" 
-      oninput="productCodeChanged(this.value)" onfocus="this.value=''"/>
+      <label for="productCategoryNumber">Add product category</label>
+      <input id="productCategoryNumber"   placeholder="drinks" 
+      onchange="productCategoryCodeChanged(this.value)" onfocus="this.value=''"/>
   </div>
-    <table class="productTable"></table>
+    <table class="productCategoryTable"></table>
 
     <div>
-      <button onclick="productStore.listProducts(excelExport)">Download CSV</button>
-      <button onclick="printPriceTags()">Print price tags</button>
+      <button onclick="productCategoryStore.listProductCategories(excelExport)">Download CSV</button>
     </div>
     <div>
-      <b>Import CSV File</b>
+      <b>Import categoriesCSV File</b>
       <input type="file" id="csvfiles" name="file" />
       <button onclick="abortRead();">Cancel</button>
       <div id="progress_bar"><div class="percent">0%</div></div>
     </div>
-    <script src="catalog.js"></script>
+    <script src="productCategories.js"></script>
 </body>
 </html>

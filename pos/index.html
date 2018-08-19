@@ -41,10 +41,24 @@ html, body {
     text-shadow: -2px -2px 2px rgba(0,0,0,1) , 2px 2px 2px rgba(0,0,0,1) ;
 }
 
+.categoriesDiv{
+    width: 100%;
+    height: 100%;
+    border: 1px solid red;
+    display: none;
+}
 
+.category {
+    min-width: 20mm;
+    width: 40mm;
+    min-height: 10mm;
+    height:20mm;
+    margin: 2mm;
+}
   </style>
   <script src="lib/DataStore.js"></script>
   <script src="lib/ProductStore.js"></script>
+  <script src="lib/ProductCategoryStore.js"></script>
   <script src="lib/OrderStore.js"></script>
   <script src="lib/PurchaseStore.js"></script>
   <script src="lib/InventoryStore.js"></script>
@@ -72,7 +86,9 @@ html, body {
     </div>
     <button onclick="payOrder()" id="paymentButton" style="flex:1;margin:5px;background-color: blue;color:white;display:block">Payment</button>
     <button onclick="cancelOrder()" id="cancelOrderButton" style="flex:1;margin:5px;background-color: red;color:white;display:block">Cancel Order</button>
-    <div id="paymentDiv" style="flex:4;display: flex;flex-direction: column;visibility: hidden;">
+    <div id="categoriesDiv" style="flex:4">
+    </div>
+    <div id="paymentDiv" style="flex:4;display: none;flex-direction: column;">
       <div id="bills" style="display: flex;flex:1" >
             <div onclick="registerPaymentRecord('bill',1000)" class="billContainer" style="background-image: url('./img/1000php.jpg')">
                 <div id="bill1000">0</div>

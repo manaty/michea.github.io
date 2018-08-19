@@ -23,6 +23,14 @@ class ProductStore {
         console.log("initialize product store");
         this.name='Product';
         this.keyPath='code';
+        this.indexDefinitions=new Array();
+        this.indexDefinitions.push({
+            name:"categoryIndex",
+            keyName:"category",
+            params: {
+                unique:false
+            }
+        })
         dataStore.addStore(this);
         this.dataStore=dataStore;
     }
@@ -46,7 +54,22 @@ class ProductStore {
     }
 
     listByCatetogry(category,callback){
-        
+        console.log("listProducts by category :"+category);
+        let transaction = this.dataStore.database.transaction(this.name,'readonly');
+        let productStore = transaction.objectStore(this.name);
+        let index = productStore.index('categoryIndex');
+        let openCursorRequest = index.openCursor(IDBKeyRange.only(category));
+        let products=new Array();
+        openCursorRequest.onsuccess = function (event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                products.push(cursor.value);
+                cursor.continue();
+            }
+            else {
+                callback(category,products);
+            }
+        };       
     }
     
     listProductAsRows(callback){

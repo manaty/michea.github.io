@@ -31,14 +31,19 @@ orderSearchButton.addEventListener("keydown", function(event) {
 var paymentButton=document.getElementById('paymentButton');
 var paymentDiv=document.getElementById('paymentDiv');
 var printReceiptButton=document.getElementById('printReceiptButton');
+var categoriesDiv=document.getElementById("categoriesDiv");
 
 
 var dataStore = new DataStore("micheapos");
 var productStore = new ProductStore(dataStore);
+var productCategoryStore = new ProductCategoryStore(dataStore);
 var orderStore = new OrderStore(dataStore);
 var purchaseStore = new PurchaseStore(dataStore);
 var inventoryStore = new InventoryStore(dataStore);
 dataStore.openDatabase(init);
+
+var productCategories=new Array();
+var allCategories=new Array();
 
 
 
@@ -47,9 +52,87 @@ function init(){
     document.getElementById("dateTime").innerHTML=new Date();
     },1000);
     orderStore.init(resetGui);
+    productCategoryStore.listProductCategoriesAsMap(function(categorytree,allcategories){
+        productCategories=categorytree;
+        allCategories=allcategories;
+        buildCategoriesDiv(productCategories,null);
+        selectCategory(null);
+    })
 }
 
+var previousSelectedCategory=undefined;
+var categoryProducts={};
+function selectCategory(event){
+    console.log("select "+this.code);
+    if(this.code && !categoryProducts[this.code]){
+        productStore.listByCatetogry(this.code,addProductsToCategoryDiv);
+    }
+    let catDiv=document.getElementById("catDiv_")
+    if(this.code){
+        catDiv=document.getElementById("catDiv_"+this.code);
+    }
+    let prevCatDiv=document.getElementById("catDiv_")
+    if(previousSelectedCategory){
+        prevCatDiv=document.getElementById("catDiv_"+previousSelectedCategory);
+    }
+    prevCatDiv.style.display="none";
+    catDiv.style.display="block";
+    previousSelectedCategory=this.code;
+}
 //GUI function
+function  addProductsToCategoryDiv(category,products){
+    let catDiv = document.getElementById("catDiv_"+category);
+    for(let product of products){
+        let childDiv=document.createElement("button");
+        childDiv.className="category";
+        childDiv.addEventListener("click",addItem.bind(
+            {
+                code:product.code
+            }
+        ));
+        childDiv.innerHTML=product.description+" "+product.unitPrice;
+        catDiv.appendChild(childDiv);
+    }
+    categoryProducts[category]=products;
+}
+
+function buildCategoriesDiv(productCategories,parent){
+    let catDiv=document.createElement("div");
+    catDiv.className="categoriesDiv";
+    catDiv.id="catDiv_"+(parent?parent.code:"");
+    catDiv.style.display=parent?"none":"block";
+    categoriesDiv.appendChild(catDiv);
+    if(parent){
+        let childDiv=document.createElement("button");
+        childDiv.className="category";
+        childDiv.addEventListener("click",selectCategory.bind(
+            {
+                code:(parent.parent)?parent.parent.code:undefined,
+                type:"category"
+            }
+        ));
+        childDiv.innerHTML="<";
+        catDiv.appendChild(childDiv);
+    }
+    if(productCategories!=null){
+        for (let categoryName in productCategories) {
+            if (productCategories.hasOwnProperty(categoryName) && productCategories[categoryName]!=undefined) {
+                let category=productCategories[categoryName];
+                let childDiv=document.createElement("button");
+                childDiv.className="category";
+                childDiv.addEventListener("click",selectCategory.bind({code:category.code,type:"category"}));
+                childDiv.innerHTML=category.code;
+                catDiv.appendChild(childDiv);
+                if(category.hasOwnProperty("children")){
+                    buildCategoriesDiv(category.children,category);
+                } else {
+                    buildCategoriesDiv(null,category);
+                }
+            }
+        }
+    }
+}
+
 function updateTotalPrice(){
     totalPriceElmt.innerHTML="&#8369;"+orderStore.currentOrder.totalPrice;
     if(orderStore.currentOrder.totalPrice>0 && orderStore.currentOrder.status=="open"){
@@ -206,13 +289,15 @@ function resetGui(){
         manualProductCodeButton.style.display='inline';
         productCodeButton.style.display='inline';
         paymentButton.style.display='none';
-        paymentDiv.style.visibility='hidden';
+        paymentDiv.style.display='none';
+        categoriesDiv.style.display='flex';
         cancelledOrderNumberTR.style.display='none';
     } else {
         manualProductCodeButton.style.display='none';
         productCodeButton.style.display='none';
         paymentButton.style.display='none';
-        paymentDiv.style.visibility='hidden';
+        paymentDiv.style.display='flex';
+        categoriesDiv.style.display='none';
         closedTotalPaidTR.style.display='block';
         closedTotalChangeTR.style.display='block';
         cancelledOrderNumberTR.style.display='block';
@@ -258,7 +343,7 @@ function productNotFoundCallback(productCode){
             alert("cannot add product with price 0");
             return;
         }
-        productStore.addProduct(productCode,description,unitPrice,productFoundCallback);
+        productStore.addProduct(productCode,description,unitPrice,1,null,productFoundCallback);
 }
 
   function productNumberChanged(val){
@@ -300,7 +385,8 @@ function productNotFoundCallback(productCode){
         paymentButton.style.display='none';
         orderStore.currentOrder.resetPayment();
         refreshPaymentView();
-        paymentDiv.style.visibility='visible';
+        paymentDiv.style.display='flex';
+        categoriesDiv.style.display='none';
     }
   }
 
@@ -336,7 +422,8 @@ function productNotFoundCallback(productCode){
   }
 
   function printReceipt(){
-    paymentDiv.style.visibility='hidden';
+    paymentDiv.style.display='none';
+    categoriesDiv.style.display='flex';
     orderStore.closeOrder(orderStore.currentOrder);
     let im=inventoryStore.registerOrder(orderStore.currentOrder);
     productStore.registerInventoryMovement(im);
