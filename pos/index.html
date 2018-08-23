@@ -63,7 +63,7 @@ html, body {
   <script>
       if ('serviceWorker' in navigator) {
     // Path is relative to the origin, not project root.
-    navigator.serviceWorker.register('/service-worker.js')
+    navigator.serviceWorker.register('./service-worker.js')
     .then(function(reg) {
         console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
     })
