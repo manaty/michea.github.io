@@ -2,13 +2,19 @@
     "name": "PoS",
     "short_name": "PoS",
     "icons": [{
-      "src": "img/logo.png",
+      "src": "/pos/img/logo.png",
         "sizes": "192x192",
         "type": "image/png"
-      }],
-    "start_url": "/index.html",
+      },
+      {
+        "src": "/pos/img/logo512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }],
+    "start_url": "/pos/index.html?utm_source=a2hs",
     "display": "standalone",
     "background_color": "#3E4EB8",
+    "scope": "/pos/",
     "theme_color": "#2F3BA2"
 }
   

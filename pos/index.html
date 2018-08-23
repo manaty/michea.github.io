@@ -4,6 +4,8 @@
   <meta charset="utf-8"/>
   <meta name="msapplication-TileImage" content="img/logo.png"/>
   <meta name="msapplication-TileColor" content="#2F3BA2"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2F3BA2"/>
   <link rel="manifest" href="manifest.json"/>
   <title>Michea Pos</title>
   <style>
@@ -61,16 +63,40 @@ html, body {
 }
   </style>
   <script>
-      if ('serviceWorker' in navigator) {
-    // Path is relative to the origin, not project root.
-    navigator.serviceWorker.register('./service-worker.js')
-    .then(function(reg) {
-        console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
-    })
-    .catch(function(error) {
-        console.error('Registration failed with ' + error);
+    window.isUpdateAvailable = new Promise(function(resolve, reject) {
+	if ('serviceWorker' in navigator ){//&& ['localhost', '127.0.0'].indexOf(location.hostname) === -1) {
+		// register service worker file
+		navigator.serviceWorker.register('service-worker.js')
+			.then(reg => {
+                console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
+				reg.onupdatefound = () => {
+					const installingWorker = reg.installing;
+					installingWorker.onstatechange = () => {
+						switch (installingWorker.state) {
+							case 'installed':
+								if (navigator.serviceWorker.controller) {
+                                    console.log('Service Worker new update available');
+									// new update available
+									resolve(true);
+								} else {
+									// no update available
+									resolve(false);
+								}
+								break;
+						}
+					};
+				};
+			})
+			.catch(err => console.error('Service worker Registration failed with', err));
+	    }
     });
-}
+    window['isUpdateAvailable']
+	.then(isAvailable => {
+		if (isAvailable) {
+			alert('New Update available! Reload the page.');
+		}
+    });
+
   </script>
   <script src="lib/DataStore.js"></script>
   <script src="lib/ProductStore.js"></script>

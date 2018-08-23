@@ -85,11 +85,7 @@ function  addProductsToCategoryDiv(category,products){
     for(let product of products){
         let childDiv=document.createElement("button");
         childDiv.className="category";
-        childDiv.addEventListener("click",addItem.bind(
-            {
-                code:product.code
-            }
-        ));
+        childDiv.addEventListener("click",addItem.bind(null,product.code));
         childDiv.innerHTML=product.description+" "+product.unitPrice;
         catDiv.appendChild(childDiv);
     }
