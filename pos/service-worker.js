@@ -1,4 +1,4 @@
-var cacheName="pwa-pos_0.16.18";
+var cacheName="pwa-pos_0.16.19";
 //var filesToCache=[];
 var filesToCache = [
     '/pos/',
@@ -48,6 +48,7 @@ var filesToCache = [
         console.log('[ServiceWorker] Caching '+filesToCache.length+' files to cache='+cacheName);
         return Promise.all(
           filesToCache.map(function (url) {
+              console.log(url + "cached");
               return cache.add(url).catch(function (reason) {
                   return console.log(url + "failed: " + String(reason));
               })
