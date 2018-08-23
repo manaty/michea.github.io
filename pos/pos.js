@@ -105,6 +105,7 @@ function buildCategoriesDiv(productCategories,parent){
     if(parent){
         let childDiv=document.createElement("button");
         childDiv.className="category";
+        childDiv.style.backgroundImage="url('/img/categories/"+parent.code+".png')";
         childDiv.addEventListener("click",selectCategory.bind(
             {
                 code:(parent.parent)?parent.parent.code:undefined,
@@ -120,6 +121,7 @@ function buildCategoriesDiv(productCategories,parent){
                 let category=productCategories[categoryName];
                 let childDiv=document.createElement("button");
                 childDiv.className="category";
+                childDiv.style.backgroundImage="url('/img/categories/"+category.code+".png')";
                 childDiv.addEventListener("click",selectCategory.bind({code:category.code,type:"category"}));
                 childDiv.innerHTML=category.code;
                 catDiv.appendChild(childDiv);

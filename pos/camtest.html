@@ -1,0 +1,70 @@
+<html>
+<head>
+    <title>Camera test</title>
+    <style>
+        
+</style>
+</head>
+    <body>
+<div>
+        <input id="imageUrl" type="text" value="./img/1000php.jpg"/>
+        <button  onclick="downloadPic()">Dowload pic</button>
+</div>
+<div id="camera">
+    <video onclick="takePic()"></video>
+</div>
+<div>
+    <canvas id="pictureCanvas" style="display: none"></canvas>
+    <img id="pictureImg">
+</div>
+    </body>
+    <script>
+        var width=320,height=0;
+        var streaming=false;
+
+        var video = document.querySelector('video');
+        var imageUrl = document.getElementById("imageUrl");
+        var canvas = document.getElementById("pictureCanvas");
+        var picture = document.getElementById("pictureImg");
+        var promise = navigator.mediaDevices.getUserMedia({video:true}).then(
+            function(mediaStream) {
+                video.srcObject = mediaStream;
+                video.onloadedmetadata = function(e) {
+                    height=video.videoHeight/(video.videoWidth/width);
+                    video.setAttribute("width",width);
+                    video.setAttribute("height",height);
+                    canvas.setAttribute("width",width);
+                    canvas.setAttribute("height",height);
+                    video.play();
+                };
+        })
+        .catch(function(err) { console.log(err.name + ": " + err.message); });
+
+        function clearPic(){
+            let context = canvas.getContext("2d");
+            context.fillStyle="#AAA";
+            context.fillRect(0,0,canvas.width,canvas.height);
+            let data =canvas.toDataURL('image/png');
+            picture.setAttribute("src",data);
+        }
+
+        function takePic(){
+            let context = canvas.getContext("2d");
+            context.drawImage(video,0,0,width,height);
+            let data =canvas.toDataURL('image/png');
+            console.log("image data="+data);
+            picture.setAttribute("src",data);
+        }
+
+        function downloadPic(){
+            context = canvas.getContext("2d");
+            picture.src=imageUrl.value;
+            picture.onload=function(){
+                picture.width=width;
+               context.drawImage(image,0,0,width,height);
+                let data =canvas.toDataURL('image/png');
+                console.log("image data="+data);
+            }
+        }
+    </script>
+</html>

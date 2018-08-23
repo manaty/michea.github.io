@@ -170,6 +170,7 @@ function productNotFoundCallback(productCategoryCode){
 
 function productCategoryStoredCallback(productCategory){
     table.rows().add(ProductCategory.toRow(productCategory));
+    table.render();
     alert('product category added');
 }
 
