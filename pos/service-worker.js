@@ -46,7 +46,13 @@ var filesToCache = [
     e.waitUntil(
       caches.open(cacheName).then(function(cache) {
         console.log('[ServiceWorker] Caching '+filesToCache.length+' files to cache='+cacheName);
-        return cache.addAll(filesToCache);
+        return Promise.all(
+          filesToCache.map(function (url) {
+              return cache.add(url).catch(function (reason) {
+                  return console.log(url + "failed: " + String(reason));
+              })
+          })
+      );
       })
     );
   });
