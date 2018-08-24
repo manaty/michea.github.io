@@ -37,7 +37,7 @@ class ProductCategoryStore {
                 cursor.continue();
             }
             else {
-                callback(products);
+                callback(productCategories);
             }
         };
     }
