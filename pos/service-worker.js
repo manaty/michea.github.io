@@ -1,4 +1,4 @@
-var cacheName="pwa-pos_0.16.32"
+var cacheName="pwa-pos_0.16.33"
 var filesToCache = [
     '/pos/',
     '/pos/index.html',
@@ -75,7 +75,7 @@ var filesToCache = [
   });
   
   self.addEventListener('fetch', function(e) {
-    console.log('[ServiceWorker] Fetch', e.request.url);
+    console.log('['+cacheName+'] Fetch', e.request.url);
     e.respondWith(
       caches.match(e.request).then(function(response) {
         return response || fetch(e.request);
