@@ -37,6 +37,7 @@ var filesToCache = [
     '/pos/img/500php.jpeg',
     '/pos/img/1000php.jpg',
     '/pos/img/logo.png',
+    '/pos/img/logo512.png',
     '/pos/img/1000php.jpg'
   ];
 
