@@ -1,4 +1,4 @@
-var cacheName="pwa-pos_0.16.30"
+var cacheName="pwa-pos_0.16.31"
 var filesToCache = [
     '/pos/',
     '/pos/index.html',
@@ -38,7 +38,8 @@ var filesToCache = [
     '/pos/img/1000php.jpg',
     '/pos/img/logo.png',
     '/pos/img/logo512.png',
-    '/pos/img/1000php.jpg'
+    '/pos/img/1000php.jpg',
+    '/pos/img/receipt.png'
   ];
 
   self.addEventListener('install', function(e) {
