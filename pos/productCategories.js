@@ -4,12 +4,17 @@ dataStore.openDatabase(init);
 var productCategories=new Array();
 var allCategories=new Array();
 
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+
 function init(){
     productCategoryStore.listProductCategoriesAsRows(createProductCategoryTable);
     productCategoryStore.listProductCategoriesAsMap(function(categorytree,allcategories){
         productCategories=categorytree;
         allCategories=allcategories;
     })
+    updateOnlineStatus();
 }
 
 var table;
@@ -176,7 +181,7 @@ function productCategoryStoredCallback(productCategory){
 
 function productCategoryListDownload(products){
     let result = "data:application/json;charset=utf-8," + JSON.stringify(products, null, 2);
-    let filename = "productCategoryList_"+formatDate()+".json";
+    let filename = "categories_"+formatDate()+".json";
     result = encodeURI(result);
      // Create a link to trigger the download
     var link = document.createElement("a");
@@ -194,9 +199,19 @@ function productCategoryListDownload(products){
 }
 
 function excelExport(productCategories){
-    let filename = "productCategoryList_"+formatDate()+".csv";
+    let filename = "categories_"+formatDate()+".csv";
     var xls = new XlsExport(productCategories, "Product Category List");
     //xls.exportToXLS(filename);
     xls.exportToCSV(filename);
     return true;
+}
+
+function updateOnlineStatus(event) {
+    if (navigator.onLine) {
+          // handle online status
+          console.log('online');
+    } else {
+          // handle offline status
+          console.log('offline');
+    }
 }

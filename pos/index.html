@@ -63,8 +63,24 @@ html, body {
 }
   </style>
   <script>
+
+    function loadScript(filename){
+        let script = document.createElement('script');
+        script.src = filename;
+        document.getElementsByTagName('head')[0].appendChild(script);
+    }  
+
+    function loadScripts(){
+        loadScript("lib/DataStore.js");
+        loadScript("lib/ProductStore.js");
+        loadScript("lib/ProductCategoryStore.js");
+        loadScript("lib/OrderStore.js");
+        loadScript("lib/PurchaseStore.js");
+        loadScript("lib/InventoryStore.js");
+    }
+
     window.isUpdateAvailable = new Promise(function(resolve, reject) {
-	if ('serviceWorker' in navigator ){//&& ['localhost', '127.0.0'].indexOf(location.hostname) === -1) {
+	if (('serviceWorker' in navigator ) && ['localhost', '127.0.0'].indexOf(location.hostname) === -1) {
 		// register service worker file
 		navigator.serviceWorker.register('service-worker.js')
 			.then(reg => {
@@ -85,10 +101,14 @@ html, body {
 								break;
 						}
 					};
-				};
+                };
+                loadScripts();
 			})
 			.catch(err => console.error('Service worker Registration failed with', err));
-	    }
+        }
+        else {
+            loadScripts();
+        }
     });
     window['isUpdateAvailable']
 	.then(isAvailable => {
@@ -97,13 +117,14 @@ html, body {
 		}
     });
 
+    window.onload=(function(e){
+        let script = document.createElement('script');
+        script.src = "pos.js";
+        document.getElementsByTagName('head')[0].appendChild(script);
+    })
+
   </script>
-  <script src="lib/DataStore.js"></script>
-  <script src="lib/ProductStore.js"></script>
-  <script src="lib/ProductCategoryStore.js"></script>
-  <script src="lib/OrderStore.js"></script>
-  <script src="lib/PurchaseStore.js"></script>
-  <script src="lib/InventoryStore.js"></script>
+
 </head>
 <body style="display: flex;flex-direction: column">
  <div style="display:block;">
@@ -237,7 +258,5 @@ html, body {
     </div>
 </div>
 </div>
-
-<script src="pos.js"></script>
 </body>
 </html>

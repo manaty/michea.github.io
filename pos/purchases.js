@@ -20,18 +20,6 @@ function createPurchaseTable(rows){
     table.columns().sort(0,'desc');
 }
 
-function formatDate() {
-    var d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('_');
-}
-
 function purchaseListDownload(purchases){
     let result = "data:application/json;charset=utf-8," + JSON.stringify(purchases, null, 2);
     let filename = "purchaseList_"+formatDate()+".json";
