@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>Product Categories</title>
+  <title>Settings</title>
   <style>
       body {
   background-color: #efefef;
@@ -112,7 +112,6 @@ input[type="text"] {
   <link href="./css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
   <script src="./lib/DataStore.js"></script>
   <script src="./lib/ConfigurationStore.js"></script> 
-  <script src="./lib/ProductCategoryStore.js"></script> 
   <script src="./lib/vanilla-datatables.js"></script> 
   <script src="./lib/xls-export.js"></script> 
   <script src="./lib/papaparse.min.js"></script> 
@@ -121,25 +120,10 @@ input[type="text"] {
 <body>
     <div style="display:flex;">
       <div style="margin-left:10px"><a href="index.html">POS</a></div>
-      <div style="margin-left:10px"><a href="catalog.html">Catalog</a></div>
     </div>
 
-    <div>
-      <label for="productCategoryNumber">Add product category</label>
-      <input id="productCategoryNumber"   placeholder="drinks" 
-      onchange="productCategoryCodeChanged(this.value)" onfocus="this.value=''"/>
-  </div>
-    <table class="productCategoryTable"></table>
+    <table class="configurationTable"></table>
 
-    <div>
-      <button onclick="productCategoryStore.listProductCategories(excelExport)">Download CSV</button>
-    </div>
-    <div>
-      <b>Import categoriesCSV File</b>
-      <input type="file" id="csvfiles" name="file" />
-      <button onclick="abortRead();">Cancel</button>
-      <div id="progress_bar"><div class="percent">0%</div></div>
-    </div>
-    <script src="productCategories.js"></script>
+    <script src="configuration.js"></script>
 </body>
 </html>

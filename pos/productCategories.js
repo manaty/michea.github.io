@@ -1,20 +1,33 @@
 var dataStore = new DataStore("micheapos");
+var configurationStore = new ConfigurationStore(dataStore);
 var productCategoryStore = new ProductCategoryStore(dataStore);
 dataStore.openDatabase(init);
 var productCategories=new Array();
 var allCategories=new Array();
 
-window.addEventListener('online', updateOnlineStatus);
-window.addEventListener('offline', updateOnlineStatus);
 
+//TODO: get it from a PropertyStore
+var categoriesCheckDelay= 3600*1000; //one hour
+var lastCategoriesCheck= new Date( Date.now() - categoriesCheckDelay*2); //set to 2 hours ago
+var willCheckCategoriesLater=false;
 
 function init(){
     productCategoryStore.listProductCategoriesAsRows(createProductCategoryTable);
     productCategoryStore.listProductCategoriesAsMap(function(categorytree,allcategories){
         productCategories=categorytree;
         allCategories=allcategories;
-    })
-    updateOnlineStatus();
+    });
+    configurationStore.fillVariableArrayWithValue([
+        [categoriesCheckDelay,"categoriesCheckDelay",3600*1000],
+        [lastCategoriesCheck,"lastCategoriesCheck",new Date( Date.now() - categoriesCheckDelay*2)],
+        [willCheckCategoriesLater,"willCheckCategoriesLater",false]
+
+    ]).then(function(){
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+    }
+    );
 }
 
 var table;
@@ -209,7 +222,35 @@ function excelExport(productCategories){
 function updateOnlineStatus(event) {
     if (navigator.onLine) {
           // handle online status
-          console.log('online');
+          if((Date.now()-lastCategoriesCheck)>categoriesCheckDelay){
+            willCheckCategoriesLater=false;
+            console.log('online, checking categories');
+            fetch("/pos/data/catalog/categories.csv").then(
+                response=>{
+                if(response.ok){
+                    response.text().then(
+                        csvString=>Papa.parse(csvString, 
+                        {header:true,
+                        complete: function(results, file) {
+                        if(results.data){
+                            console.log("storing categories:"+results.data);
+                            productCategoryStore.storeProductCategoryArray(results.data,
+                            function(successes,errors){
+                                alert("imported "+successes+" categories, ignored "+errors);
+                                table.render();
+                            });
+                        }
+                        }
+                        })
+                    );
+                }});
+          } else {
+            console.log('online but it not yet time to check if the categories have been updated');
+            if(!willCheckCategoriesLater){
+                willCheckCategoriesLater=true;
+                setTimeout(updateOnlineStatus, timeout);
+            }
+          }
     } else {
           // handle offline status
           console.log('offline');

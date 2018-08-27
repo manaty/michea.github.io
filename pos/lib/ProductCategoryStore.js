@@ -143,7 +143,7 @@ class ProductCategoryStore {
             if (i<productCategories.length) {
                 let p=ProductCategory.fromObject(productCategories[i]);
                 i++;
-                if((!p.code)||(p.code.length<4)||isNaN(p.unitPrice)){
+                if(!p.code){
                     errors++;
                     putNext();
                 } else {

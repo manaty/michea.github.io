@@ -72,6 +72,7 @@ html, body {
 
     function loadScripts(){
         loadScript("lib/DataStore.js");
+        loadScript("lib/ConfigurationStore.js");
         loadScript("lib/ProductStore.js");
         loadScript("lib/ProductCategoryStore.js");
         loadScript("lib/OrderStore.js");
@@ -128,12 +129,14 @@ html, body {
 </head>
 <body style="display: flex;flex-direction: column">
  <div style="display:block;">
-                <span id="dateTime"></span>
                 <span style="margin-left:10px"><a href="catalog.html">Catalog</a></span>
                 <span style="margin-left:10px"><a href="orders.html">Orders</a></span>
                 <span style="margin-left:10px"><a href="purchases.html">Purchases</a></span>
-                <span style="flex:1;margin-left:10px"><input type="text" placeholder="Search Order" id="orderSearch"/></span>
+                <span style="margin-left:10px"><a href="configuration.html">Setting</a></span>
+                <span style="flex:1;margin-left:10px">
+                <input type="text" placeholder="Search Order" id="orderSearch"/></span>
                 <span style="margin-left:10px" id="accountDiv"></span>
+                <span id="dateTime"></span>
  </div>       
 <div style="display: flex;flex:1;">
 <div style="display: flex;flex-direction: column;flex:1">

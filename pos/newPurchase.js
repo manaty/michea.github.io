@@ -27,6 +27,7 @@ var closeButton=document.getElementById('closeButton');
 
 
 var dataStore = new DataStore("micheapos");
+var configurationStore = new ConfigurationStore(dataStore);
 var productStore = new ProductStore(dataStore);
 var purchaseStore = new PurchaseStore(dataStore);
 var inventoryStore = new InventoryStore(dataStore);

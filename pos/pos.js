@@ -35,6 +35,7 @@ var categoriesDiv=document.getElementById("categoriesDiv");
 
 
 var dataStore = new DataStore("micheapos");
+var configurationStore = new ConfigurationStore(dataStore);
 var productStore = new ProductStore(dataStore);
 var productCategoryStore = new ProductCategoryStore(dataStore);
 var orderStore = new OrderStore(dataStore);

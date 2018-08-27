@@ -1,4 +1,5 @@
 var dataStore = new DataStore("micheapos");
+var configurationStore = new ConfigurationStore(dataStore);
 var purchaseStore = new PurchaseStore(dataStore);
 dataStore.openDatabase(init);
 

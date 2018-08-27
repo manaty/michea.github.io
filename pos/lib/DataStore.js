@@ -11,7 +11,7 @@ class DataStore{
 
     openDatabase(callback){
         console.log("openDatabase");
-        let request = window.indexedDB.open(this.dbName,18);
+        let request = window.indexedDB.open(this.dbName,24);
         request.onupgradeneeded = (function(event) {
             console.log("create/upgrade db");
             let upgradeTransaction = event.target.transaction;

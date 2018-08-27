@@ -1,4 +1,4 @@
-var cacheName="pwa-pos_0.16.34"
+var cacheName="pwa-pos_0.19.0"
 var filesToCache = [
     '/pos/',
     '/pos/index.html',
@@ -13,7 +13,10 @@ var filesToCache = [
     '/pos/productCategories.js',
     '/pos/purchases.html',
     '/pos/purchases.js',
+    '/pos/lib/ConfigurationStore.js',
     '/pos/lib/DataStore.js',
+    '/pos/lib/dataSynchronization.js',
+    '/pos/lib/dateformat.js',
     '/pos/lib/InventoryStore.js',
     '/pos/lib/JsBarcode.min.js',
     '/pos/lib/OrderStore.js',
