@@ -63,26 +63,7 @@ html, body {
 }
   </style>
   <script>
-
-    function loadScript(filename){
-        let script = document.createElement('script');
-        script.src = filename;
-        document.getElementsByTagName('head')[0].appendChild(script);
-    }  
-
-    function loadScripts(){
-        loadScript("lib/DataStore.js");
-        loadScript("lib/ConfigurationStore.js");
-        loadScript("lib/ProductStore.js");
-        loadScript("lib/ProductCategoryStore.js");
-        loadScript("lib/OrderStore.js");
-        loadScript("lib/PurchaseStore.js");
-        loadScript("lib/InventoryStore.js");
-    }
-
     window.isUpdateAvailable = new Promise(function(resolve, reject) {
-	if (('serviceWorker' in navigator ) && ['localhost', '127.0.0'].indexOf(location.hostname) === -1) {
-		// register service worker file
 		navigator.serviceWorker.register('service-worker.js')
 			.then(reg => {
                 console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
@@ -103,27 +84,46 @@ html, body {
 						}
 					};
                 };
-                loadScripts();
-			})
+        	})
 			.catch(err => console.error('Service worker Registration failed with', err));
-        }
-        else {
-            loadScripts();
-        }
     });
     window['isUpdateAvailable']
 	.then(isAvailable => {
 		if (isAvailable) {
-			alert('New Update available! Reload the page.');
+            alert('New Update available! we will reload the page.');
+            document.location="index.html";
 		}
     });
 
-    window.onload=(function(e){
-        let script = document.createElement('script');
-        script.src = "pos.js";
-        document.getElementsByTagName('head')[0].appendChild(script);
-    })
-
+    loadScript = function(url) {
+      return new Promise(function(resolve, reject) {
+        var element = document.createElement('script');
+        element.onload = function() {
+          console.log("loaded "+url);
+          resolve(url);
+        };
+        element.onerror = function() {
+          console.log("failed loading "+url);
+          reject(url);
+        };
+        //element.async = true;
+        element['src'] = url;
+        document['body'].appendChild(element);
+      });
+    };
+  
+    window.onload=function(e){
+        Promise.all(["lib/DataStore.js","lib/ConfigurationStore.js"
+                ,"lib/ProductStore.js","lib/ProductCategoryStore.js","lib/OrderStore.js"
+                ,"lib/PurchaseStore.js","lib/InventoryStore.js"].map(loadScript)).then(
+                    function(){
+                        console.log("all script loaded, we load pos");
+                        loadScript("pos.js");
+                    }
+                ).catch(function() {
+                    console.log('error while loading scripts');
+                });
+    }
   </script>
 
 </head>

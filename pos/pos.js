@@ -32,6 +32,7 @@ var paymentButton=document.getElementById('paymentButton');
 var paymentDiv=document.getElementById('paymentDiv');
 var printReceiptButton=document.getElementById('printReceiptButton');
 var categoriesDiv=document.getElementById("categoriesDiv");
+var accountDiv=document.getElementById("accountDiv");
 
 
 var dataStore = new DataStore("micheapos");
@@ -46,7 +47,10 @@ dataStore.openDatabase(init);
 var productCategories=new Array();
 var allCategories=new Array();
 
-
+function signout(){
+    navigator.serviceWorker.controller.postMessage({ 'action': 'signout'});
+    setTimeout(function(){document.location="index.html";},1000);
+}
 
 function init(){
     setInterval(function(){
@@ -59,6 +63,14 @@ function init(){
         buildCategoriesDiv(productCategories,null);
         selectCategory(null);
     })
+    fetch("/pos/userInfo").then(response => {return response.text();})
+        .then( userName =>  {
+            if(userName.length>0){
+                accountDiv.innerHTML=  userName+' <button onclick="signout()">Sign Out</button>';
+            } else {
+                document.location="signin.html";
+            }
+        } ).catch(function(){document.location="signin.html";})
 }
 
 var previousSelectedCategory=undefined;
