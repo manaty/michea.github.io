@@ -124,7 +124,7 @@
                 console.log('Controller loaded');
                 window.location.reload();
             });
-            navigator.serviceWorker.register('service-worker.js')
+            navigator.serviceWorker.register('/pos/service-worker.js')
                 .then(reg => {
                     if (!navigator.serviceWorker.controller) {
                         // The window client isn't currently controlled so it's a new service
@@ -136,7 +136,7 @@
                     registration.update();
                     onNewServiceWorker(registration);
                 })
-                .catch(err => alert('Service worker Registration failed with', err));
+                .catch(err => alert('Service worker Registration failed with err='+JSON.stringify(err)));
         });
 
         function signin() {

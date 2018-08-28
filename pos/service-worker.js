@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.11"
+var cacheName = "pwa-pos_0.20.12"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
