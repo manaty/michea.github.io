@@ -63,42 +63,10 @@ html, body {
 }
   </style>
   <script>
-    /*window.isUpdateAvailable = new Promise(function(resolve, reject) {
-		navigator.serviceWorker.register('service-worker.js')
-			.then(reg => {
-                console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
-				reg.onupdatefound = () => {
-					const installingWorker = reg.installing;
-					installingWorker.onstatechange = () => {
-						switch (installingWorker.state) {
-							case 'installed':
-								if (navigator.serviceWorker.controller) {
-                                    console.log('Service Worker new update available');
-									// new update available
-									resolve(true);
-								} else {
-									// no update available
-									resolve(false);
-								}
-								break;
-						}
-					};
-                };
-        	})
-			.catch(err => console.error('Service worker Registration failed with', err));
-    });
-    window['isUpdateAvailable']
-	.then(isAvailable => {
-		if (isAvailable) {
-            alert('New Update available! we will reload the page.');
-            document.location="index.html";
-		}   
-    });*/
-
     if(!navigator.serviceWorker || !navigator.serviceWorker.controller) {
         document.location="signin.html";
     }
-    
+
     loadScript = function(url) {
       return new Promise(function(resolve, reject) {
         var element = document.createElement('script');
