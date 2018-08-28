@@ -162,7 +162,7 @@ self.addEventListener('fetch', function (e) {
     e.respondWith(Response.redirect('/pos/signin.html'));
   } else if (e.request.url.indexOf("/pos/userInfo")!=-1){
     console.log("userinfo requested");
-    e.respondWith(new Response(currentUser==null?"":"{'username':'"+currentUser.username+"','admin':"+currentUser.admin+"}");
+    e.respondWith(new Response(currentUser==null?"":"{'username':'"+currentUser.username+"','admin':"+currentUser.admin+"}"));
   } else {
     console.log("cache checked");
     e.respondWith(
