@@ -101,7 +101,7 @@
             if ((!username) || username.length < 4 || (!password) || password.length <= 4) {
                 alert("invalid username or password");
             }
-            if (navigator.serviceWorker) {
+            if (navigator.serviceWorker && navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({ 'action': 'signin', 'username': username, 'password': password });
                 setTimeout(function () { document.location = "index.html"; }, 1000);
             } else {
