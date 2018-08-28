@@ -63,7 +63,7 @@ html, body {
 }
   </style>
   <script>
-    window.isUpdateAvailable = new Promise(function(resolve, reject) {
+    /*window.isUpdateAvailable = new Promise(function(resolve, reject) {
 		navigator.serviceWorker.register('service-worker.js')
 			.then(reg => {
                 console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
@@ -93,8 +93,12 @@ html, body {
             alert('New Update available! we will reload the page.');
             document.location="index.html";
 		}   
-    });
+    });*/
 
+    if(!navigator.serviceWorker || !navigator.serviceWorker.controller) {
+        document.location="signin.html";
+    }
+    
     loadScript = function(url) {
       return new Promise(function(resolve, reject) {
         var element = document.createElement('script');
