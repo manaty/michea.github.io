@@ -63,10 +63,10 @@ function init(){
         buildCategoriesDiv(productCategories,null);
         selectCategory(null);
     })
-    fetch("/pos/userInfo").then(response => {return response.text();})
-        .then( userName =>  {
-            if(userName.length>0){
-                accountDiv.innerHTML=  userName+' <button onclick="signout()">Sign Out</button>';
+    fetch("/pos/userInfo").then(response => {return response.json();})
+        .then( user =>  {
+            if(user && user.username.length>0){
+                accountDiv.innerHTML=  user.username+' <button onclick="signout()">Sign Out</button>';
             } else {
                 document.location="signin.html";
             }

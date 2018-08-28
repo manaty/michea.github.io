@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.19.25"
+var cacheName = "pwa-pos_0.20.0"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -144,7 +144,7 @@ self.addEventListener('message', function (e) {
         //if(encryptedUsername.substring(encryptedUsername.length-2)!=encryptedPassword.substring(encryptedPassword.length-2)){
         //  alert("invalid username or password");
         //}
-        currentUser = { 'username': e.data.username, 'password': e.data.password };
+        currentUser = { 'username': e.data.username, 'password': e.data.password,'admin':(e.data.password.length==40) };
         break;
       case "signout":
         currentUser = null;
@@ -162,7 +162,7 @@ self.addEventListener('fetch', function (e) {
     e.respondWith(Response.redirect('/pos/signin.html'));
   } else if (e.request.url.indexOf("/pos/userInfo")!=-1){
     console.log("userinfo requested");
-    e.respondWith(new Response(currentUser==null?"":currentUser.username));
+    e.respondWith(new Response(currentUser==null?"":"{'username':'"+currentUser.username+"','admin':"+currentUser.admin+"}");
   } else {
     console.log("cache checked");
     e.respondWith(
