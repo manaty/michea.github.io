@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.10"
+var cacheName = "pwa-pos_0.20.11"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -152,6 +152,8 @@ self.addEventListener('message', function (e) {
         break;
       default: console.log("unknown action");
     }
+  } else if (e.data === 'skipWaiting') {
+    skipWaiting();
   }
 });
 

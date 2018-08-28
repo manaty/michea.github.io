@@ -90,56 +90,66 @@
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" id="pos_signin_password" required><br/>
 
-            <button type="submit">SignIn</button>
+            <button type="submit" style="visibility: hidden;" id="pos_signin_submit">SignIn</button>
         </form>
     </div>
 
     <script>
+
+        function onNewServiceWorker(registration) {
+            if (registration.waiting) {
+                // SW is waiting to activate. Can occur if multiple clients open and
+                // one of the clients is refreshed.
+                return callback();
+            }
+            function listenInstalledStateChange() {
+                registration.installing.addEventListener('statechange', function (event) {
+                    if (event.target.state === 'installed') {
+                        // A new service worker is available
+                        registration.waiting.postMessage('skipWaiting');
+                        document.getElementById("pos_signin_submit").style.visibility = "visible";
+                    }
+                });
+            };
+            if (registration.installing) {
+                return listenInstalledStateChange();
+            }
+            // We are currently controlled so a new SW may be found...
+            // Add a listener in case a new SW is found,
+            registration.addEventListener('updatefound', listenInstalledStateChange);
+        }
+
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.addEventListener('controllerchange', function (event) {
+                console.log('Controller loaded');
+                window.location.reload();
+            });
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => {
+                    if (!navigator.serviceWorker.controller) {
+                        // The window client isn't currently controlled so it's a new service
+                        // worker that will activate immediately
+                        return;
+                    }
+                    console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
+                    document.getElementById("pos_signin_submit").style.visibility = "visible";
+                    registration.update();
+                    onNewServiceWorker(registration);
+                })
+                .catch(err => alert('Service worker Registration failed with', err));
+        });
+
         function signin() {
             var username = document.getElementById("pos_signin_username").value;
             var password = document.getElementById("pos_signin_password").value;
             if ((!username) || username.length < 4 || (!password) || password.length <= 4) {
                 alert("invalid username or password");
             }
-            if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+            if (navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({ 'action': 'signin', 'username': username, 'password': password });
                 document.location = "index.html";
             } else {
-                window.isUpdateAvailable = new Promise(function (resolve, reject) {
-                    navigator.serviceWorker.register('service-worker.js')
-                        .then(reg => {
-                            console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
-                            reg.onupdatefound = () => {
-                                const installingWorker = reg.installing;
-                                installingWorker.onstatechange = () => {
-                                    switch (installingWorker.state) {
-                                        case 'installed':
-                                            if (navigator.serviceWorker.controller) {
-                                                console.log('Service Worker new update available');
-                                                // new update available
-                                                resolve(true);
-                                            } else {
-                                                // no update available
-                                                resolve(false);
-                                            }
-                                            break;
-                                    }
-                                };
-                            };
-                        })
-                        .catch(err => console.error('Service worker Registration failed with', err));
-                });
-                window['isUpdateAvailable']
-                    .then(isAvailable => {
-                        if (isAvailable) {
-                            console.log('New Update available! we will reload the page.');
-                            document.location = "index.html";
-                        } else {
-                            navigator.serviceWorker.controller.postMessage({ 'action': 'signin', 'username': username, 'password': password });
-                            console.log("redirecting to index after signin");
-                            document.location = "index.html";
-                        }
-                    });
+                alert("something is wrong again, call the developper");
             }
         }
     </script>
