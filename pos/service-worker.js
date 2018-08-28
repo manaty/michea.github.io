@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.6"
+var cacheName = "pwa-pos_0.20.7"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -156,11 +156,12 @@ self.addEventListener('message', function (e) {
 
 self.addEventListener('fetch', function (e) {
   console.log('[' + cacheName + '] Fetch', e.request.url);
-  if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)
-  && (e.request.url.indexOf("unregister.html")==-1) && (e.request.url.indexOf("signin.html")==-1)){
-    console.log("user not logged in, redirecting to signin.html");
-    e.respondWith(Response.redirect('/pos/signin.html'));
-  } else if (e.request.url.indexOf("/pos/userInfo")!=-1){
+  //if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)
+  //&& (e.request.url.indexOf("unregister.html")==-1) && (e.request.url.indexOf("signin.html")==-1)){
+  //  console.log("user not logged in, redirecting to signin.html");
+  //  e.respondWith(Response.redirect('/pos/signin.html'));
+  //} else 
+  if (e.request.url.indexOf("/pos/userInfo")!=-1){
     console.log("userinfo requested");
     e.respondWith(new Response(currentUser==null?"":"{'username':'"+currentUser.username+"','admin':"+currentUser.admin+"}"));
   } else {
