@@ -173,7 +173,8 @@ self.addEventListener('fetch', function (e) {
   } else {
     e.respondWith(
       caches.match(e.request).then(function (response) {
-        return response || fetch(e.request);
+       console.log(JSON.stringify(e.request));
+       return response || fetch(e.request);
       })
     );
   }
