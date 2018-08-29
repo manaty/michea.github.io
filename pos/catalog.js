@@ -297,7 +297,7 @@ function pushFile(products) {
                 },
                 "content": content,
                 "branch": "master",
-                "sha":sha1(content)
+                "sha":window.sha1(content)
             },
             headers: new Headers({
                 'User-Agent': currentUser.username,
