@@ -161,7 +161,7 @@ self.addEventListener('message', function (e) {
 });
 
 self.addEventListener('fetch', function (e) {
-  console.log('[' + cacheName + '] Fetch'+ e.request.url+' currentUser='+currentUser);
+  console.log('[' + cacheName + '] Fetch '+ e.request.url+' currentUser='+currentUser);
   if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)
   && (e.request.url.indexOf("unregister.html")==-1) && (e.request.url.indexOf("signin.html")==-1)){
     console.log("user not logged in, redirecting to signin.html");
@@ -173,7 +173,7 @@ self.addEventListener('fetch', function (e) {
   } else {
     e.respondWith(
       caches.match(e.request).then(function (response) {
-       console.log(JSON.stringify(e.request));
+       console.log(e.request.headers);
        return response || fetch(e.request);
       })
     );
