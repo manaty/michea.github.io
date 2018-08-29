@@ -64,8 +64,9 @@ function init() {
         selectCategory(null);
     })
     fetch("/pos/userInfo").then(response => {
-        let result = response.json();
-        return result;
+        return response.text();
+    }).then(resp=>{
+        return JSON.parse(resp);
     }).then(user => {
             if (user && user.username.length > 0) {
                 accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
