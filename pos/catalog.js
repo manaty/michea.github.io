@@ -288,6 +288,7 @@ function pushFile(products) {
 
         fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/pos/data/catalog/products.csv", {
             method: 'PUT',
+            mode: 'cors',
             body: {
                 "path": "products.csv",
                 "message": "update product list",
@@ -295,8 +296,8 @@ function pushFile(products) {
                 "sha":window.sha1(content)
             },
             headers: new Headers({
-               // 'User-Agent': currentUser.username,
-                "Content-Type": "application/vnd.github.v3+json",
+                'User-Agent': currentUser.username,
+                'Content-Type': 'application/vnd.github.v3+json',
                 'Authorization': 'token ' + currentUser.password
             })
         })
