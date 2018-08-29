@@ -12,6 +12,7 @@ function signout() {
 }
 
 function init() {
+    navigator.serviceWorker.register('service-worker.js');
     productStore.listProductAsRows(createProductTable);
     fetch("/pos/userInfo").then(response => { return response.json(); })
         .then(user => {
@@ -298,7 +299,7 @@ function pushFile(products) {
                 "branch": "master"
             },
             headers: new Headers({
-                'User-Agent:': currentUser.username,
+                'User-Agent': currentUser.username,
                 "Content-Type": "application/vnd.github.v3+json",
                 'Authorization': 'token ' + currentUser.password
             })
