@@ -64,18 +64,14 @@ function init() {
         selectCategory(null);
     })
     fetch("/pos/userInfo").then(response => {
-        return response.text();
-    }).then(resp=>{
-        return JSON.parse(resp);
+        return response.json();
     }).then(user => {
             if (user && user.username.length > 0) {
                 accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
             } else {
-                console.log("error while getting user from userInfo");
+                document.location = "signin.html";
             }
-        }).catch((e) => {
-            console.log("error while getting userInfo" + JSON.stringify(e));
-        })
+        }).catch(function () { document.location = "signin.html"; })
 }
 
 var previousSelectedCategory = undefined;
