@@ -63,11 +63,6 @@ html, body {
 }
   </style>
   <script>
-    if(!navigator.serviceWorker.controller) {
-        console.log("page not controlled by service worker, redirecting to signin");
-        document.location="signin.html";
-    }
-
     loadScript = function(url) {
       return new Promise(function(resolve, reject) {
         var element = document.createElement('script');

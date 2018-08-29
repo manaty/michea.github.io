@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.12"
+var cacheName = "pwa-pos_0.20.20"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -101,8 +101,6 @@ function encrypt(str) {
 
 self.addEventListener('install', function (e) {
   console.log('[ServiceWorker] Install' + JSON.stringify(e));
-
-  //&& ['localhost', '127.0.0'].indexOf(location.hostname) === -1
   e.waitUntil(
     caches.open(cacheName).then(function (cache) {
       console.log('[ServiceWorker] Caching ' + filesToCache.length + ' files to cache=' + cacheName);
@@ -114,6 +112,9 @@ self.addEventListener('install', function (e) {
           })
         })
       );
+    }).then(function(){
+      console.log('[ServiceWorker] skipWait');
+      return self.skipWaiting();
     })
   );
 });
@@ -145,25 +146,24 @@ self.addEventListener('message', function (e) {
         //  alert("invalid username or password");
         //}
         currentUser = { 'username': e.data.username, 'password': e.data.password,'admin':(e.data.password.length==40) };
-        console.log("logged in user "+JSON.stringify(currentUser));
+        console.log("logged in user "+JSON.stringify(currentUser)+" event="+JSON.stringify(e));
+        e.ports[0].postMessage("signedIn");
         break;
       case "signout":
         currentUser = null;
         break;
       default: console.log("unknown action");
     }
-  } else if (e.data === 'skipWaiting') {
-    skipWaiting();
   }
 });
 
 self.addEventListener('fetch', function (e) {
-  console.log('[' + cacheName + '] Fetch', e.request.url);
-  //if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)
-  //&& (e.request.url.indexOf("unregister.html")==-1) && (e.request.url.indexOf("signin.html")==-1)){
-  //  console.log("user not logged in, redirecting to signin.html");
-  //  e.respondWith(Response.redirect('/pos/signin.html'));
-  //} else 
+  console.log('[' + cacheName + '] Fetch'+ e.request.url+' currentUser='+JSON.stringify(currentUser));
+  if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)
+  && (e.request.url.indexOf("unregister.html")==-1) && (e.request.url.indexOf("signin.html")==-1)){
+    console.log("user not logged in, redirecting to signin.html");
+    e.respondWith(Response.redirect('/pos/signin.html'));
+  } else 
   if (e.request.url.indexOf("/pos/userInfo")!=-1){
     console.log("userinfo requested");
     e.respondWith(new Response(currentUser==null?"":"{'username':'"+currentUser.username+"','admin':"+currentUser.admin+"}"));
