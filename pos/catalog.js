@@ -296,7 +296,8 @@ function pushFile(products) {
                     "email": "change@me.com"
                 },
                 "content": content,
-                "branch": "master"
+                "branch": "master",
+                "sha":sha1(content)
             },
             headers: new Headers({
                 'User-Agent': currentUser.username,
