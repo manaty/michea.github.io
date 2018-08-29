@@ -70,7 +70,7 @@ function init() {
             if (user && user.username.length > 0) {
                 accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
             } else {
-                console.log("error while getting userInfo" + JSON.stringify(e));
+                console.log("error while getting user from userInfo");
             }
         }).catch((e) => {
             console.log("error while getting userInfo" + JSON.stringify(e));

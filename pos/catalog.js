@@ -15,10 +15,12 @@ function init() {
                 if (user.admin) {
                     document.getElementById("pushToServer").style.display = "block";
                 }
-            } else {
-                document.location = "signin.html";
+            }  else {
+                console.log("error while getting user from userInfo");
             }
-        }).catch(function () { document.location = "signin.html"; })
+        }).catch((e) => {
+            console.log("error while getting userInfo" + JSON.stringify(e));
+        })
 }
 
 var table;
