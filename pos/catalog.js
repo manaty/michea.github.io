@@ -3,27 +3,28 @@ var currentUser = null;
 var dataStore = new DataStore("micheapos");
 var configurationStore = new ConfigurationStore(dataStore);
 var productStore = new ProductStore(dataStore);
+var accountDiv = document.getElementById("accountDiv");
 dataStore.openDatabase(init);
+
+function signout() {
+    navigator.serviceWorker.controller.postMessage({ 'action': 'signout' });
+    setTimeout(function () { document.location = "index.html"; }, 1000);
+}
 
 function init() {
     productStore.listProductAsRows(createProductTable);
-    fetch("/pos/userInfo").then(response => {
-        return response.text();
-    }).then(resp=>{
-        return JSON.parse(resp);
-    ).then(user => {
+    fetch("/pos/userInfo").then(response => { return response.json(); })
+        .then(user => {
             currentUser = user;
             if (user && user.username.length > 0) {
                 accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
                 if (user.admin) {
                     document.getElementById("pushToServer").style.display = "block";
                 }
-            }  else {
-                console.log("error while getting user from userInfo");
+            } else {
+                document.location = "signin.html";
             }
-        }).catch((e) => {
-            console.log("error while getting userInfo" + JSON.stringify(e));
-        })
+        }).catch(function () { document.location = "signin.html"; })
 }
 
 var table;
