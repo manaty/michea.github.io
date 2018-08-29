@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.24"
+var cacheName = "pwa-pos_0.20.25"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -169,7 +169,7 @@ self.addEventListener('fetch', function (e) {
   } else 
   if (e.request.url.indexOf("/pos/userInfo")!=-1){
     console.log("userinfo requested");
-    e.respondWith(new Response(currentUser==null?"{}":"{'username':'"+currentUser.username+"','admin':"+currentUser.admin+"}"));
+    e.respondWith(new Response(currentUser==null?"{}":JSON.stringify(currentUser)));
   } else {
     e.respondWith(
       caches.match(e.request).then(function (response) {
