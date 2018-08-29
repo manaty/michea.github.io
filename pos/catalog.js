@@ -295,11 +295,11 @@ function pushFile(products) {
                 "content": content,
                 "sha":window.sha1(content)
             },
-            headers: new Headers({
+            headers:{
                 'User-Agent': currentUser.username,
                 'Content-Type': 'application/vnd.github.v3+json',
                 'Authorization': 'token ' + currentUser.password
-            })
+            }
         })
             .then(response => response.text()).then(resp => { alert("pushed file:" + resp) })
     }
