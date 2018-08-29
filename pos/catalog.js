@@ -286,7 +286,7 @@ function pushFile(products) {
         let owner = "manaty";
         let repo = "michea.github.io";
 
-        fetch("https://api.github.com/repos/" + owner + "/" + repo + "/pos/data/catalog/products.csv", {
+        fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/pos/data/catalog/products.csv", {
             method: 'PUT',
             body: {
                 "path": "products.csv",
