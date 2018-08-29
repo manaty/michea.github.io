@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.23"
+var cacheName = "pwa-pos_0.20.24"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -145,7 +145,10 @@ self.addEventListener('message', function (e) {
         //if(encryptedUsername.substring(encryptedUsername.length-2)!=encryptedPassword.substring(encryptedPassword.length-2)){
         //  alert("invalid username or password");
         //}
-        currentUser = { 'username': e.data.username, 'password': e.data.password,'admin':(e.data.password.length==40) };
+        currentUser = {};
+        currentUser.username=e.data.username;
+        currentUser.password=e.data.password;
+        currentUser.admin=(e.data.password.length==40);
         console.log("logged in user "+JSON.stringify(currentUser)+" event="+JSON.stringify(e));
         e.ports[0].postMessage("signedIn");
         break;
