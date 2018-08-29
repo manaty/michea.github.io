@@ -291,18 +291,13 @@ function pushFile(products) {
             body: {
                 "path": "products.csv",
                 "message": "update product list",
-                "committer": {
-                    "name": currentUser.username,
-                    "email": "change@me.com"
-                },
                 "content": content,
-                "branch": "master",
                 "sha":window.sha1(content)
             },
             headers: new Headers({
                 'User-Agent': currentUser.username,
                 "Content-Type": "application/vnd.github.v3+json",
-                'Authorization': 'token ' + currentUser.password
+                'Authorization': 'Token ' + currentUser.password
             })
         })
             .then(response => response.text()).then(resp => { alert("pushed file:" + resp) })
