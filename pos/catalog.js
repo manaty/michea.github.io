@@ -7,8 +7,11 @@ dataStore.openDatabase(init);
 
 function init() {
     productStore.listProductAsRows(createProductTable);
-    fetch("/pos/userInfo").then(response => { return response.json(); })
-        .then(user => {
+    fetch("/pos/userInfo").then(response => {
+        return response.text();
+    }).then(resp=>{
+        return JSON.parse(resp);
+    }.then(user => {
             currentUser = user;
             if (user && user.username.length > 0) {
                 accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
