@@ -281,7 +281,7 @@ function pushFile(products) {
     if (currentUser.admin) {
         let xls = new XlsExport(products, "Product List");
         let content = xls.toBase64(xls.objectToSemicolons());
-
+        console.log("content="+content);
         //FIXME use configuration
         let owner = "manaty";
         let repo = "michea.github.io";
@@ -289,12 +289,12 @@ function pushFile(products) {
         fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/pos/data/catalog/products.csv", {
             method: 'PUT',
             mode: 'cors',
-            body: JSON.stringify({
+            body: {
                 'path': '/pos/data/catalog/products.csv',
                 'message': 'update product list',
                 'content': content,
                 'sha':window.sha1(content)
-            }),
+            },
             headers:{
                 'User-Agent': currentUser.username,
                 'Accept': 'application/vnd.github.v3+json',
