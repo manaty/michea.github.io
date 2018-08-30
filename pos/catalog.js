@@ -286,11 +286,11 @@ function pushFile(products) {
         let owner = "manaty";
         let repo = "michea.github.io";
 
-        fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/pos/data/catalog/products2.csv", {
+        fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/pos/data/catalog/products.csv", {
             method: 'PUT',
             mode: 'cors',
             body: {
-                "path": "products2.csv",
+                "path": "/pos/data/catalog/products.csv",
                 "message": "update product list",
                 "content": content,
                 "sha":window.sha1(content)
