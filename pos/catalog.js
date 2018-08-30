@@ -289,12 +289,12 @@ function pushFile(products) {
         fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/pos/data/catalog/products.csv", {
             method: 'PUT',
             mode: 'cors',
-            body: {
+            body: JSON.stringify({
                 'path': '/pos/data/catalog/products.csv',
                 'message': 'update product list',
-                'content': "'"+content+"'",
-                'sha':"'"+window.sha1(content)+"'"
-            },
+                'content': content,
+                'sha':window.sha1(content)
+            }),
             headers:{
                 'User-Agent': currentUser.username,
                 'Accept': 'application/vnd.github.v3+json',
