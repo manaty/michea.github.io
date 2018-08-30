@@ -281,7 +281,11 @@ function pushFile(products) {
     if (currentUser.admin) {
         let xls = new XlsExport(products, "Product List");
         let content = xls.toBase64(xls.objectToSemicolons());
+        content="bXkgdXBkYXRlZCBmaWxlIGNvbnRlbnRz",
+        "sha": "329688480d39049927147c162b9d2deaf885005f";
         console.log("content="+content);
+        let sha=window.sha1(content);
+        console.log("sha="+sha);
         //FIXME use configuration
         let owner = "manaty";
         let repo = "michea.github.io";
@@ -293,7 +297,7 @@ function pushFile(products) {
                 'path': '/pos/data/catalog/products.csv',
                 'message': 'update product list',
                 'content': content,
-                'sha':window.sha1(content)
+                'sha':sha
             },
             headers:{
                 'User-Agent': currentUser.username,
