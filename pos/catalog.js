@@ -290,10 +290,10 @@ function pushFile(products) {
             method: 'PUT',
             mode: 'cors',
             body: {
-                "path": "/pos/data/catalog/products.csv",
-                "message": "update product list",
-                "content": content,
-                "sha":window.sha1(content)
+                'path': '/pos/data/catalog/products.csv',
+                'message': 'update product list',
+                'content': "'"+content+"'",
+                'sha':"'"+window.sha1(content)+"'"
             },
             headers:{
                 'User-Agent': currentUser.username,
