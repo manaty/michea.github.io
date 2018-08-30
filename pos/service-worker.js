@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.29"
+var cacheName = "pwa-pos_0.20.30"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -160,43 +160,6 @@ self.addEventListener('message', function (e) {
   }
 });
 
-function sendXHR(request){
-  return new Promise((resolve,reject)=>{
-  xhr=new XMLHttpRequest();
-  var formData = new FormData();
-  for(key of request.body){
-    console.log("formdata append : "+key+","+request.body[key]);
-    formData.append(key,request.body[key]);
-  }
-  xhr.onload = function () {
-    if (this.status >= 200 && this.status < 300) {
-      resolve({data:xhr.response});
-    } else {
-      reject({
-        status: this.status,
-        statusText: xhr.statusText
-      });
-    }
-  };
-  xhr.onerror = function () {
-    reject({
-      status: this.status,
-      statusText: xhr.statusText
-    });
-  };
-
-  console.log("xhr open "+request.method+","+ request.url);
-  xhr.open(request.method, request.url);
-
-  for(key of request.headers){
-    console.log("header add : "+key+","+request.body[key]);
-    formData.append();
-    xhr.setRequestHeader(key,request.body[key]);
-  }
-  xmlhttp.send(formData);
-  });
-}
-
 self.addEventListener('fetch', function (e) {
   console.log('[' + cacheName + '] Fetch '+ e.request.url+' currentUser='+currentUser);
   if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)
@@ -210,15 +173,7 @@ self.addEventListener('fetch', function (e) {
   } else {
     e.respondWith(
       caches.match(e.request).then(function (response) {
-       let result=response;
-       if(!response){
-         if(e.request.url.indexOf("api.github.com/")!=-1){
-          result=sendXHR(e.request);
-         } else {
-           result=fetch(e.request);
-         }
-       }
-       return result;
+       return response || fetch(e.request);
       })
     );
   }
