@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.30"
+var cacheName = "pwa-pos_0.20.31"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -27,10 +27,15 @@ var filesToCache = [
   '/pos/lib/ProductStore.js',
   '/pos/lib/PurchaseStore.js',
   '/pos/lib/vanilla-datatables.js',
+  '/pos/lib/sha1.js',
   '/pos/lib/xls-export.js',
   '/pos/css/bootstrap.min.css',
+  '/pos/css/bootstrap.min.css.map',
   '/pos/css/pricetags.css',
   '/pos/css/receipt.css',
+  '/pos/css/vanilla-dataTables.css',
+  'pos/css/materialdesignicons.min.css',
+  'pos/css/materialdesignicons.min.css.map',
   '/pos/img/0.01coin.jpg',
   '/pos/img/0.05coin.jpg',
   '/pos/img/0.25coin.jpg',
