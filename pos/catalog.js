@@ -297,7 +297,7 @@ function pushFile(products) {
             },
             headers:{
                 'User-Agent': currentUser.username,
-                'Content-Type': 'application/vnd.github.v3+json',
+                'Accept': 'application/vnd.github.v3+json',
                 'Authorization': 'token ' + currentUser.password
             }
         })
