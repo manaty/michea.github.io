@@ -316,7 +316,8 @@ function retrieveGithubFileSha(owner,repo,username,password,path){
         }
     })
     .catch((e)=>{
-        alert("Error while retrieving productList",e);
+        console.log("Error while retrieving productList "+e);
+        alert("Error while retrieving productList");
     })
 }
 
@@ -344,6 +345,7 @@ function updateGithubFile(owner,repo,username,password,path,sha){
             alert("pushed file: "+resp.content.name);
         })
         .catch((e)=>{
+            console.log("Error while updating productList "+e);
             alert("Error while updating productList",e);
         })
 }
