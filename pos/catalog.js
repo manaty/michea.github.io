@@ -338,8 +338,12 @@ function updateGithubFile(owner,repo,username,password,products,path,sha){
             }
         })
         .then(response => response.json()).then(resp => { 
-            productFileSha=resp.content.sha;
-            alert("pushed file: "+resp.content.name);
+            if(!resp.content){
+                productFileSha=resp.content.sha;
+                alert("pushed file: "+resp.content.name);
+            } else {
+                alert("error while pushing file :"+resp.message);
+            }
         })
         .catch((e)=>{
             console.log("Error while updating productList "+e);
