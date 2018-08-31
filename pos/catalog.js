@@ -12,7 +12,6 @@ function signout() {
 }
 
 function init() {
-    navigator.serviceWorker.register('service-worker.js');
     productStore.listProductAsRows(createProductTable);
     fetch("/pos/userInfo").then(response => { return response.json(); })
         .then(user => {

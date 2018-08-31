@@ -16,6 +16,7 @@ function signout() {
 var categoriesCheckDelay = 3600 * 1000; //one hour
 var lastCategoriesCheck = new Date(Date.now() - categoriesCheckDelay * 2); //set to 2 hours ago
 var willCheckCategoriesLater = false;
+var currentUser=null;
 
 function init() {
     productCategoryStore.listProductCategoriesAsRows(createProductCategoryTable);
