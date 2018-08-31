@@ -285,13 +285,13 @@ var previousProducts=null;
 function pushFile(products) {
     if (currentUser.admin) {
         if(!productFileSha){
-            retrieveGithubFileSha(github_owner,github_repo,currentUser.username,currentUser.password,"pos/data/catalog/products.csv");
+            retrieveGithubFileSha(github_owner,github_repo,currentUser.username,currentUser.password,products,"pos/data/catalog/products.csv");
         }
-        else updateGithubFile(github_owner,github_repo,currentUser.username,currentUser.password,"pos/data/catalog/products.csv",productFileSha);
+        else updateGithubFile(github_owner,github_repo,currentUser.username,currentUser.password,products,"pos/data/catalog/products.csv",productFileSha);
     }
 }
 
-function retrieveGithubFileSha(owner,repo,username,password,path){
+function retrieveGithubFileSha(owner,repo,username,password,products,path){
     fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/"+path, {
         method: 'GET',
         mode: 'cors',
@@ -309,7 +309,7 @@ function retrieveGithubFileSha(owner,repo,username,password,path){
             productFileSha=resp.sha;
             previousProducts=XlsExport.fromBase64(resp.content);
             console.log("previousProducts="+previousProducts);
-            updateGithubFile(owner,repo,username,password,path,productFileSha);
+            updateGithubFile(owner,repo,username,password,products,path,productFileSha);
         }
     })
     .catch((e)=>{
@@ -318,7 +318,7 @@ function retrieveGithubFileSha(owner,repo,username,password,path){
     })
 }
 
-function updateGithubFile(owner,repo,username,password,path,sha){
+function updateGithubFile(owner,repo,username,password,products,path,sha){
         let xls = new XlsExport(products, "Product List");
         let content = XlsExport.toBase64(xls.objectToSemicolons());
         console.log("content="+content);
