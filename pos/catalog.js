@@ -295,7 +295,9 @@ function retrieveGithubFileSha(owner,repo,username,password,path){
     fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/"+path, {
         method: 'GET',
         mode: 'cors',
-        body: {},
+        body: {
+            'path': path
+        },
         headers:{
             'User-Agent': username,
             'Accept': 'application/vnd.github.v3+json',
@@ -337,11 +339,11 @@ function updateGithubFile(owner,repo,username,password,path,sha){
                 'Authorization': 'token ' + password
             }
         })
-            .then(response => response.json()).then(resp => { 
-                productFileSha=resp.content.sha;
-                alert("pushed file: "+resp.content.name);
-            })
-            .catch((e)=>{
-                alert("Error while updating productList",e);
-            })
+        .then(response => response.json()).then(resp => { 
+            productFileSha=resp.content.sha;
+            alert("pushed file: "+resp.content.name);
+        })
+        .catch((e)=>{
+            alert("Error while updating productList",e);
+        })
 }
