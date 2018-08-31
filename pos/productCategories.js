@@ -281,7 +281,7 @@ function updateOnlineStatus(event) {
 }
 
 function pushFile(productCategories) {
-    if (currentUser.admin && productFileSha) {
+    if (currentUser.admin && fileSha) {
         let xls = new XlsExport(productCategories, "Product Category List");
         let content = XlsExport.toBase64(xls.objectToSemicolons());
         let githubAccess=new GithubContentsApiV3(github_owner,github_repo,currentUser.username, currentUser.password);
