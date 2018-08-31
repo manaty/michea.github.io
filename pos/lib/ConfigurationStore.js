@@ -23,25 +23,6 @@ class ConfigurationStore {
         dataStore.addStore(this);
         this.dataStore=dataStore;
     }
-    
-    fillVariableArrayWithValue(vars){
-        let promises=new Array();
-        for(let variable of vars){
-            promises.push(new Promise(function(resolve,reject){
-                this.lookup(argument[0][0],
-                    function(configurationItem){
-                        argument[0]=configurationItem.value;
-                        resolve();
-                    }.bind(null,argument[0][0]),
-                    function(){
-                        argument[0][0]=argument[0][2];
-                        this.storeConfigurationItem(new ConfigurationItem(argument[0][1],"",argument[0][2]),
-                            function(item){resolve();});
-                    }.bind(this,argument[0]));
-           }.bind(this,variable)));
-        }
-        return Promise.all(promises);
-    }
 
     listConfigurationItems(callback){
         console.log("listConfigurationItems");

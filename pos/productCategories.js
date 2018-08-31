@@ -23,17 +23,9 @@ function init() {
         productCategories = categorytree;
         allCategories = allcategories;
     });
-    configurationStore.fillVariableArrayWithValue([
-        [categoriesCheckDelay, "categoriesCheckDelay", 3600 * 1000],
-        [lastCategoriesCheck, "lastCategoriesCheck", new Date(Date.now() - categoriesCheckDelay * 2)],
-        [willCheckCategoriesLater, "willCheckCategoriesLater", false]
-
-    ]).then(function () {
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus();
-    }
-    );
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
     fetch("/pos/userInfo").then(response => { return response.json(); })
         .then(user => {
             currentUser = user;
