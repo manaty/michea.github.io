@@ -313,6 +313,9 @@ function retrieveGithubFileSha(owner,repo,username,password,path){
             updateGithubFile(owner,repo,username,password,path,productFileSha);
         }
     })
+    .catch((e)=>{
+        alert("Error while retrieving productList",e);
+    })
 }
 
 function updateGithubFile(owner,repo,username,password,path,sha){
@@ -337,5 +340,8 @@ function updateGithubFile(owner,repo,username,password,path,sha){
             .then(response => response.json()).then(resp => { 
                 productFileSha=resp.content.sha;
                 alert("pushed file: "+resp.content.name);
+            })
+            .catch((e)=>{
+                alert("Error while updating productList",e);
             })
 }
