@@ -338,6 +338,7 @@ function updateGithubFile(owner,repo,username,password,content,path,sha){
             }
         })
         .then(response => response.json()).then(resp => { 
+            console.log("received response"+JSON.stringify(resp));
             if(!resp.content){
                 productFileSha=resp.content.sha;
                 alert("pushed file: "+resp.content.name);
