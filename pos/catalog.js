@@ -295,9 +295,6 @@ function retrieveGithubFileSha(owner,repo,username,password,path){
     fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/"+path, {
         method: 'GET',
         mode: 'cors',
-        body: {
-            'path': path
-        },
         headers:{
             'User-Agent': username,
             'Accept': 'application/vnd.github.v3+json',
