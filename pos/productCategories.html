@@ -122,6 +122,7 @@ input[type="text"] {
     <div style="display:flex;">
       <div style="margin-left:10px"><a href="index.html">POS</a></div>
       <div style="margin-left:10px"><a href="catalog.html">Catalog</a></div>
+      <span style="margin-left:10px" id="accountDiv"></span>
     </div>
 
     <div>
@@ -133,6 +134,8 @@ input[type="text"] {
 
     <div>
       <button onclick="productCategoryStore.listProductCategories(excelExport)">Download CSV</button>
+      <br/>
+      <button id="pushToServer" onclick="productCategoryStore.listProductCategories(pushFile)" style="display:none">Push to server</button>
     </div>
     <div>
       <b>Import categoriesCSV File</b>
