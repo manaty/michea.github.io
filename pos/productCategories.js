@@ -24,9 +24,6 @@ function init() {
         productCategories = categorytree;
         allCategories = allcategories;
     });
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus();
     fetch("/pos/userInfo").then(response => { return response.json(); })
         .then(user => {
             currentUser = user;
@@ -34,7 +31,10 @@ function init() {
                 accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
                 if (user.admin) {
                     document.getElementById("pushToServer").style.display = "block";
-                }
+                }    
+                window.addEventListener('online', updateOnlineStatus);
+                window.addEventListener('offline', updateOnlineStatus);
+                updateOnlineStatus();
             } else {
                 document.location = "signin.html";
             }
