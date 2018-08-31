@@ -277,34 +277,66 @@ function printPriceTags() {
     }
 }
 
+var github_owner="manaty";
+var github_repo = "michea.github.io";
+var productFileSha=null;
+var previousProducts=null;
+
 function pushFile(products) {
     if (currentUser.admin) {
-        let xls = new XlsExport(products, "Product List");
-        let content = xls.toBase64(xls.objectToSemicolons());
-        content="bXkgdXBkYXRlZCBmaWxlIGNvbnRlbnRz",
-        "sha": "329688480d39049927147c162b9d2deaf885005f";
-        console.log("content="+content);
-        let sha=window.sha1(content);
-        console.log("sha="+sha);
-        //FIXME use configuration
-        let owner = "manaty";
-        let repo = "michea.github.io";
+        if(!productFileSha){
+            retrieveGithubFileSha(github_owner,github_repo,currentUser.username,currentUser.password,"pos/data/catalog/products.csv");
+        }
+        else updateGithubFile(github_owner,github_repo,currentUser.username,currentUser.password,"pos/data/catalog/products.csv",productFileSha);
+    }
+}
 
-        fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/pos/data/catalog/products.csv", {
+function retrieveGithubFileSha(owner,repo,username,password,path){
+    fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/"+path, {
+        method: 'GET',
+        mode: 'cors',
+        body: {},
+        headers:{
+            'User-Agent': username,
+            'Accept': 'application/vnd.github.v3+json',
+            'Authorization': 'token ' + password
+        }
+    })
+    .then(response => response.json()).then(resp => { 
+        if(!resp.type=="file"){
+            console.log("expected response is not a file, resp="+JSON.stringify(resp));
+            alert("Error while accessing the file on server, contact admin");
+        } else {
+            productFileSha=resp.sha;
+            previousProducts=XlsExport.fromBase64(resp.content);
+            console.log("previousProducts="+previousProducts);
+            updateGithubFile(owner,repo,username,password,path,productFileSha);
+        }
+    })
+}
+
+function updateGithubFile(owner,repo,username,password,path,sha){
+        let xls = new XlsExport(products, "Product List");
+        let content = XlsExport.toBase64(xls.objectToSemicolons());
+        console.log("content="+content);
+        fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/"+path, {
             method: 'PUT',
             mode: 'cors',
             body: {
-                'path': '/pos/data/catalog/products.csv',
+                'path': path,
                 'message': 'update product list',
                 'content': content,
                 'sha':sha
             },
             headers:{
-                'User-Agent': currentUser.username,
+                'User-Agent': username,
                 'Accept': 'application/vnd.github.v3+json',
-                'Authorization': 'token ' + currentUser.password
+                'Authorization': 'token ' + password
             }
         })
-            .then(response => response.text()).then(resp => { alert("pushed file:" + resp) })
+            .then(response => response.json()).then(resp => { 
+                productFileSha=resp.content.sha;
+                alert("pushed file: "+resp.content.name);
+            })
     }
 }

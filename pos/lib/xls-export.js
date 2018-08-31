@@ -83,8 +83,12 @@ class XlsExport {
     link.click();
   }
 
-  toBase64(string) {
+  static toBase64(string) {
     return window.btoa(unescape(encodeURIComponent(string)));
+  }
+
+  static fromBase64(string){
+    return decodeURIComponent(escape(window.atob(string)));
   }
 
   objectToTable() {
