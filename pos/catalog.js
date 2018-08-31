@@ -338,5 +338,4 @@ function updateGithubFile(owner,repo,username,password,path,sha){
                 productFileSha=resp.content.sha;
                 alert("pushed file: "+resp.content.name);
             })
-    }
 }
