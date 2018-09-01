@@ -46,6 +46,7 @@ dataStore.openDatabase(init);
 
 var productCategories = new Array();
 var allCategories = new Array();
+var loggedUser;
 
 function signout() {
     navigator.serviceWorker.controller.postMessage({ 'action': 'signout' });
@@ -67,6 +68,7 @@ function init() {
         return response.json();
     }).then(user => {
             if (user && user.username.length > 0) {
+                loggedUser=user;
                 accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
             } else {
                 document.location = "signin.html";
@@ -455,6 +457,9 @@ function printReceipt() {
     }
     if (orderStore.currentOrder.vipNumber) {
         mywindow.document.write(' VIP# ' + orderStore.currentOrder.vipNumber + '<br/>');
+    }
+    if(loggedUser){
+        mywindow.document.write(' Cashier: ' + loggedUser.username + '<br/>');
     }
 
     if (orderStore.currentOrder.items) {
