@@ -12,6 +12,7 @@ var cancelledOrderNumberTR = document.getElementById("cancelledOrderNumberTR");
 
 var cart = document.getElementById("cart");
 var productCodeButton = document.getElementById("productNumber");
+var manualProductInput = document.getElementById("manualProductInput");
 var manualProductDatalist = document.getElementById("manualProductDatalist");
 manualProductDatalist.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
@@ -69,9 +70,11 @@ function init() {
     productStore.listProducts( products => {
         console.log("adding "+products.length+ " products to manualProductDatalist");
         products.forEach(function(product){
-            var option = document.createElement('option');
-            option.value = product.code;
-            manualProductDatalist.appendChild(option);
+            if(isNaN(product.code)){
+                var option = document.createElement('option');
+                option.value = product.code;
+                manualProductDatalist.appendChild(option);
+            }
          });
     })
     productCategoryStore.listProductCategoriesAsMap(function (categorytree, allcategories) {
@@ -315,7 +318,7 @@ function resetGui() {
     document.getElementById('cancelledOrderNumber').innerHTML = orderStore.currentOrder.cancelledOrderNumber;
     cart.innerHTML = "";
     if (orderStore.currentOrder.status == "open") {
-        manualProductDatalist.style.display = 'inline';
+        manualProductInput.style.display = 'inline';
         manualProductNumber.style.display = 'inline';
         productCodeButton.style.display = 'inline';
         paymentButton.style.display = 'none';
@@ -323,7 +326,7 @@ function resetGui() {
         categoriesDiv.style.display = 'flex';
         cancelledOrderNumberTR.style.display = 'none';
     } else {
-        manualProductDatalist.style.display = 'none';
+        manualProductInput.style.display = 'none';
         manualProductNumber.style.display = 'none';
         productCodeButton.style.display = 'none';
         paymentButton.style.display = 'none';
@@ -411,7 +414,7 @@ function refreshPaymentView() {
 function payOrder() {
     if (orderStore.currentOrder.status == "open") {
         orderStore.currentOrder.status = "paying";
-        manualProductDatalist.style.display = 'none';
+        manualProductInput.style.display = 'none';
         manualProductNumber.style.display = 'none';
         productCodeButton.style.display = 'none';
         paymentButton.style.display = 'none';
