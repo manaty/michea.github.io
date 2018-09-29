@@ -116,8 +116,7 @@ html, body {
     </div>
     <div>
         <label for="manualProductNumber">Manual barcode</label>
-        <input id="manualProductNumber"   placeholder="00001" 
-        onchanged="productCodeChanged(this.value)" onfocus="this.value=''"/>
+        <datalist id="manualProductNumber"></datalist>
     </div>
     <button onclick="payOrder()" id="paymentButton" style="flex:1;margin:5px;background-color: blue;color:white;display:block">Payment</button>
     <button onclick="cancelOrder()" id="cancelOrderButton" style="flex:1;margin:5px;background-color: red;color:white;display:block">Cancel Order</button>

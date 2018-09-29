@@ -2,10 +2,14 @@ var dataStore = new DataStore("micheapos");
 var configurationStore = new ConfigurationStore(dataStore);
 var orderStore = new OrderStore(dataStore);
 var inventoryStore = new InventoryStore(dataStore);
+var orderNumberToDelete = document.getElementById("orderNumberToDelete");
 dataStore.openDatabase(init);
 
 function init(){
-    orderStore.listOrdersAsRows(createOrderTable);
+    orderStore.init(()=>{
+        orderNumberToDelete.max= orderStore.currentOrder.orderNumber-1;
+        orderStore.listOrdersAsRows(createOrderTable);
+    });
 }
 
 var table;
@@ -23,10 +27,10 @@ function createOrderTable(rows){
 }
 
 function orderListDownload(orders){
-    let result = "data:application/json;charset=utf-8," + JSON.stringify(orders, null, 2);
+    let date = "data:application/json;charset=utf-8," + JSON.stringify(orders, null, 2);
     let filename = "orderList_"+formatDate()+".json";
     result = encodeURI(result);
-     // Create a link to trigger the download
+      // Create a link to trigger the download
     var link = document.createElement("a");
     link.href = result;
     link.download = filename;
@@ -39,4 +43,13 @@ function orderListDownload(orders){
 
     // Remove the link
     document.body.removeChild(link);
+}
+
+function purgeOrders(){
+    let deleteNumber= orderNumberToDelete.value;
+    if(orderStore.currentOrder.orderNumber<=deleteNumber){
+        alert("cannot delete all orders, please choose an order number less than "+orderStore.currentOrder.orderNumber);
+    } else {
+        orderStore.purgeOrders(deleteNumber);
+    }
 }

@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.20.32"
+var cacheName = "pwa-pos_0.20.43"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -40,6 +40,8 @@ var filesToCache = [
   '/pos/img/0.01coin.jpg',
   '/pos/img/0.05coin.jpg',
   '/pos/img/0.25coin.jpg',
+  '/pos/img/1coin.jpg',
+  '/pos/img/5coin.jpg',
   '/pos/img/10coin.jpg',
   '/pos/img/20php.jpg',
   '/pos/img/50php.jpeg',

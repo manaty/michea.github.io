@@ -190,7 +190,7 @@ function addItem(productCode) {
 }
 
 function productFoundCallback(product) {
-    alert("product already exists")
+    //todo display record
 }
 function productNotFoundCallback(productCode) {
     let description = prompt("New product " + productCode + " description", "");

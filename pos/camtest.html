@@ -15,7 +15,13 @@
 </div>
 <div>
     <canvas id="pictureCanvas" style="display: none"></canvas>
-    <img id="pictureImg">
+    <img id="picture2Img"  style="display: none"/>
+    <img id="pictureImg"/>
+</div>
+<div>
+        <label for="rotate">Rotation</label>
+        <input type="range" id="rotate" name="rotate"
+               min="-180" max="180" value="0" onchange="rotatePic()"/>
 </div>
     </body>
     <script>
@@ -26,6 +32,8 @@
         var imageUrl = document.getElementById("imageUrl");
         var canvas = document.getElementById("pictureCanvas");
         var picture = document.getElementById("pictureImg");
+        var picture2 = document.getElementById("picture2Img");
+        var rotateElmt= document.getElementById("rotate");
         var promise = navigator.mediaDevices.getUserMedia({video:true}).then(
             function(mediaStream) {
                 video.srcObject = mediaStream;
@@ -39,6 +47,19 @@
                 };
         })
         .catch(function(err) { console.log(err.name + ": " + err.message); });
+
+        function rotatePic(){
+            let angle=rotateElmt.value;
+            let ctx = canvas.getContext("2d");
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.save();
+            ctx.translate(canvas.width/2,canvas.height/2);
+            ctx.rotate(angle*Math.PI/1800);
+            ctx.drawImage(picture2,-canvas.width/2,-canvas.width/2);
+            ctx.restore();
+            let data =canvas.toDataURL('image/png');
+            picture.setAttribute("src",data);
+        }
 
         function clearPic(){
             let context = canvas.getContext("2d");
@@ -54,6 +75,7 @@
             let data =canvas.toDataURL('image/png');
             console.log("image data="+data);
             picture.setAttribute("src",data);
+            picture2.setAttribute("src",data);
         }
 
         function downloadPic(){

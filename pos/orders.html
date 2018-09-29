@@ -107,10 +107,16 @@ input[type="text"] {
 
     <table class="orderTable"></table>
 
-    <script src="orders.js"></script>
     
     <div>
         <button onclick="orderStore.listOrders(orderListDownload)">Download</button>
     </div>
+    <div>
+      <b>Order numbers to delete</b>
+      <input type="number" id="orderNumberToDelete"/>
+      <button onclick="purgeOrders();">Delete</button>
+    </div>
+    
+    <script src="orders.js"></script>
 </body>
 </html>

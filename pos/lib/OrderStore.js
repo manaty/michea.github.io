@@ -346,4 +346,24 @@ class OrderStore{
             throw "Too late to cancel the order";
         } 
     }
+
+    purgeOrders(deleteNumber){
+        console.log("purgeOrders with orderNumber less than ")+deleteNumber;
+        let transaction = this.dataStore.database.transaction(this.name,'readwrite');
+        let orderStore = transaction.objectStore(this.name);
+        let openCursorRequest = orderStore.openCursor();
+        let count=0;
+        openCursorRequest.onsuccess = function (event) {
+            let cursor = event.target.result;
+            if (cursor) {
+                if(cursor.value.orderNumber<=deleteNumber){
+                    cursor.delete();
+                    count++;
+                }
+                cursor.continue();
+            } else {
+                alert("Deleted "+count+" orders");     
+          }
+        };
+    }
 }
