@@ -14,7 +14,7 @@ var cart = document.getElementById("cart");
 var productCodeButton = document.getElementById("productNumber");
 var manualProductInput = document.getElementById("manualProductInput");
 var manualProductDatalist = document.getElementById("manualProductDatalist");
-manualProductDatalist.addEventListener("keydown", function (event) {
+manualProductInput.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
         addItem(event.target.value);
