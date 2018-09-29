@@ -12,13 +12,21 @@ var cancelledOrderNumberTR = document.getElementById("cancelledOrderNumberTR");
 
 var cart = document.getElementById("cart");
 var productCodeButton = document.getElementById("productNumber");
-var manualProductDatalist = document.getElementById("manualProductNumber");
+var manualProductDatalist = document.getElementById("manualProductDatalist");
 manualProductDatalist.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
         addItem(event.target.value);
     }
 });
+var manualProductNumber = document.getElementById("manualProductNumber");
+manualProductNumber.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        addItem(event.target.value);
+    }
+});
+
 var orderSearchButton = document.getElementById("orderSearch");
 
 orderSearchButton.addEventListener("keydown", function (event) {
@@ -308,6 +316,7 @@ function resetGui() {
     cart.innerHTML = "";
     if (orderStore.currentOrder.status == "open") {
         manualProductDatalist.style.display = 'inline';
+        manualProductNumber.style.display = 'inline';
         productCodeButton.style.display = 'inline';
         paymentButton.style.display = 'none';
         paymentDiv.style.display = 'none';
@@ -315,6 +324,7 @@ function resetGui() {
         cancelledOrderNumberTR.style.display = 'none';
     } else {
         manualProductDatalist.style.display = 'none';
+        manualProductNumber.style.display = 'none';
         productCodeButton.style.display = 'none';
         paymentButton.style.display = 'none';
         paymentDiv.style.display = 'flex';
@@ -402,6 +412,7 @@ function payOrder() {
     if (orderStore.currentOrder.status == "open") {
         orderStore.currentOrder.status = "paying";
         manualProductDatalist.style.display = 'none';
+        manualProductNumber.style.display = 'none';
         productCodeButton.style.display = 'none';
         paymentButton.style.display = 'none';
         orderStore.currentOrder.resetPayment();
