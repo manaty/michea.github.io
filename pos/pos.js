@@ -18,6 +18,7 @@ manualProductNumber.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
         addItem(event.target.value);
+        event.target.value="";
     }
 });
 
