@@ -116,11 +116,7 @@ html, body {
     </div>
     <div>
         <label for="manualProductNumber">Manual barcode</label>
-        <input id="manualProductNumber" type="text"/>
-    </div>  
-    <div>
-        <label for="manualProductInput">Datalist code</label>
-        <input  id="manualProductInput" list="manualProductDatalist"/>
+        <input id="manualProductNumber"  list="manualProductDatalist"/>
         <datalist id="manualProductDatalist"></datalist>
     </div>
     <button onclick="payOrder()" id="paymentButton" style="flex:1;margin:5px;background-color: blue;color:white;display:block">Payment</button>
