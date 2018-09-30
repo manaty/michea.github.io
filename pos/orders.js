@@ -27,7 +27,7 @@ function createOrderTable(rows){
 }
 
 function orderListDownload(orders){
-    let date = "data:application/json;charset=utf-8," + JSON.stringify(orders, null, 2);
+    let result = "data:application/json;charset=utf-8," + JSON.stringify(orders, null, 2);
     let filename = "orderList_"+formatDate()+".json";
     result = encodeURI(result);
       // Create a link to trigger the download
