@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.21.7"
+var cacheName = "pwa-pos_0.21.8"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -55,7 +55,7 @@ var filesToCache = [
   '/pos/img/receipt.png'
 ];
 
-var currentUser = null;
+var currentUser;
 
 var k = Array.apply(null, { length: 64 }).map((v, i) => (0 | (Math.abs(Math.sin(i + 1)) * 4294967296)));
 
