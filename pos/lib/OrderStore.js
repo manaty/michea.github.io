@@ -148,6 +148,9 @@ class Order{
         let result=this.items[index];
         let oldPrice=result.price;
         this.items.splice(index, 1);
+        for(let i=0;i<this.items.length;i++){
+            this.items[i].index=i;
+        }
         this.totalPrice-=oldPrice;
         this.lastUpdate=new Date();
         return result;

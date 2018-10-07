@@ -211,10 +211,8 @@ function delItem(itemIndex) {
         if (r == true) {
             orderStore.currentOrder.deleteItem(itemIndex);
             orderStore.storeCurrentOrder();
-            cart.removeChild(cart.childNodes[itemIndex]);
+            resetGui();
         }
-        updateTotalPrice();
-        productCodeButton.focus();
     }
 }
 

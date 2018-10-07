@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#2F3BA2"/>
   <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/_reboot.scss"/>
   <title>Michea Pos</title>
   <style>
 html, body {
@@ -119,7 +121,7 @@ html, body {
         <input id="manualProductNumber"  list="manualProductDatalist"/>
         <datalist id="manualProductDatalist"></datalist>
     </div>
-    <button onclick="payOrder()" id="paymentButton" style="flex:1;margin:5px;background-color: blue;color:white;display:block">Payment</button>
+    <button onclick="payOrder()" id="paymentButton" style="flex:1; min-height: 100px;margin:5px;background-color: blue;color:white;display:block">Payment</button>
     <button onclick="cancelOrder()" id="cancelOrderButton" style="flex:1;margin:5px;background-color: red;color:white;display:block">Cancel Order</button>
     <div id="categoriesDiv" style="flex:4">
     </div>
