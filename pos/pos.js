@@ -454,10 +454,10 @@ function printReceipt() {
     var mywindow = window.open('', 'PRINT', 'height=400,width=200');
     mywindow.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"/>');
     mywindow.document.write('<title>Receipt ' + orderStore.currentOrder.orderNumber + '</title>');
-    mywindow.document.write('<link rel="stylesheet" type="text/css" href="/pos/css/receipt.css">');
-    mywindow.document.write('<script src="/pos/lib/JsBarcode.min.js"></script>');
+    mywindow.document.write('<link rel="stylesheet" type="text/css" href="./css/receipt.css">');
+    mywindow.document.write('<script src="./lib/JsBarcode.min.js"></script>');
     mywindow.document.write('</head><body>');
-    mywindow.document.write('<div style="text-align: center"><img src="/pos/img/receipt.png" style="width:90%;margin:0px;"/>');
+    mywindow.document.write('<div style="text-align: center"><img src="./img/receipt.png" style="width:90%;margin:0px;"/>');
     mywindow.document.write('National Highway, Bi&ntilde;an<br/>4024 Laguna<br/></div>');
     mywindow.document.write('VAT. Reg. TIN: 288-889-273<br/>http://michea.ph');
     mywindow.document.write('<div><br/><span id="currentDateTime" style="text-align: right;width: 100%">' +
