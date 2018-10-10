@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.21.14"
+var cacheName = "pwa-pos_0.21.20"
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -153,15 +153,16 @@ self.addEventListener('message', function (e) {
         //if(encryptedUsername.substring(encryptedUsername.length-2)!=encryptedPassword.substring(encryptedPassword.length-2)){
         //  alert("invalid username or password");
         //}
-        self.currentUser = {};
-        self.currentUser.username=e.data.username;
-        self.currentUser.password=e.data.password;
-        self.currentUser.admin=(e.data.password.length==40);
-        console.log("logged in user "+JSON.stringify(self.currentUser)+" event="+JSON.stringify(e));
+        let currentUser = {};
+        currentUser.username=e.data.username;
+        currentUser.password=e.data.password;
+        currentUser.admin=(e.data.password.length==40);
+        localStorage.setItem("currentUser",currentUser);
+        console.log("logged in user "+JSON.stringify(currentUser)+" event="+JSON.stringify(e));
         e.ports[0].postMessage("signedIn");
         break;
       case "signout":
-        self.currentUser = null;
+        localStorage.setItem("currentUser",null);
         break;
       default: console.log("unknown action");
     }
@@ -169,15 +170,16 @@ self.addEventListener('message', function (e) {
 });
 
 self.addEventListener('fetch', function (e) {
-  console.log('[' + cacheName + '] Fetch '+ e.request.url+' self.currentUser='+self.currentUser);
-  if((self.currentUser==null) && (e.request.url.indexOf(".html")!=-1)
+  let currentUser=  localStorage.getItem("currentUser");
+  console.log('[' + cacheName + '] Fetch '+ e.request.url+' currentUser='+currentUser);
+  if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)
   && (e.request.url.indexOf("unregister.html")==-1) && (e.request.url.indexOf("signin.html")==-1)){
     console.log("user not logged in, redirecting to signin.html");
     e.respondWith(Response.redirect('/pos/signin.html'));
   } else 
   if (e.request.url.indexOf("/pos/userInfo")!=-1){
     console.log("userinfo requested");
-    e.respondWith(new Response(self.currentUser==null?"{}":JSON.stringify(self.currentUser)));
+    e.respondWith(new Response(currentUser==null?"{}":JSON.stringify(currentUser)));
   } else {
     e.respondWith(
       caches.match(e.request).then(function (response) {

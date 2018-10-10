@@ -18,6 +18,19 @@
 html, body {
   height: 90%;
 }
+.breadcrumbs{
+    min-height: 60px;
+    font-size: 1.5em;
+}
+.breadcrumbs > span {
+  margin:5px 2px;
+  padding:10px 3px;
+  background-color:rgb(134, 172, 66);
+}
+
+.breadcrumbs > span > a {
+    cursor: pointer;
+}
 
 .action-td{
   display: flex;
@@ -26,11 +39,34 @@ html, body {
 }
 
 .action-td > button {
-  margin: 0px 10px 0px 10px;
+  padding:10px 23px;
+  margin:5px;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px 0px rgba(51, 51, 51, 0.5);
 }
 
 #paymentDiv > div > div {
   margin: 0px 10px 0px 10px;
+  box-shadow: 0 5px 10px 0px rgba(51, 51, 51, 0.5);
+}
+
+button {
+    background-color: rgb(134, 172, 66);
+    color: white;
+    padding: 5px 10px;
+    margin: 3px 0;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 30px 0px rgba(51, 51, 51, 0.5);
+    border-radius: 5px;
+}
+
+#paymentButton{
+    background-color: rgb(134, 172, 66);
+}
+
+#cancelOrderButton{
+    background-color: rgb(64, 87, 24);
 }
 
 .billContainer {
@@ -65,7 +101,7 @@ html, body {
     min-height: 10mm;
     height:20mm;
     margin: 2mm;
-    text-shadow: -2px -2px 8px white , 2px 2px 8px white ,-4px -4px 8px white , 4px 4px 8px white ;
+    text-shadow: -2px -2px 8px black;
 }
   </style>
   <script>
@@ -103,14 +139,14 @@ html, body {
 
 </head>
 <body style="display: flex;flex-direction: column">
- <div style="display:block;">
-                <span style="margin-left:10px"><a href="catalog.html">Catalog</a></span>
-                <span style="margin-left:10px"><a href="orders.html">Orders</a></span>
-                <span style="margin-left:10px"><a href="purchases.html">Purchases</a></span>
-                <span style="margin-left:10px"><a href="configuration.html">Setting</a></span>
-                <span style="flex:1;margin-left:10px">
-                <input type="text" placeholder="Search Order" id="orderSearch"/></span>
-                <span style="margin-left:10px" id="accountDiv"></span>
+ <div class="breadcrumbs" style="display:block;">
+                <span><a href="catalog.html">Catalog</a></span>
+                <span><a href="orders.html">Orders</a></span>
+                <span><a href="purchases.html">Purchases</a></span>
+                <span><a href="configuration.html">Setting</a></span>
+                <span style="flex:1;">
+                  <input type="text" placeholder="Search Order" id="orderSearch"/></span>
+                <span id="accountDiv"></span>
                 <span id="dateTime"></span>
  </div>       
 <div style="display: flex;flex:1;">
@@ -125,8 +161,8 @@ html, body {
         <input id="manualProductNumber"  list="manualProductDatalist"/>
         <datalist id="manualProductDatalist"></datalist>
     </div>
-    <button onclick="payOrder()" id="paymentButton" style="flex:1; min-height: 100px;margin:5px;background-color: blue;color:white;display:block">Payment</button>
-    <button onclick="cancelOrder()" id="cancelOrderButton" style="flex:1;margin:5px;background-color: red;color:white;display:block">Cancel Order</button>
+    <button onclick="payOrder()" id="paymentButton" style="flex:1; color:white;display:block">Payment</button>
+    <button onclick="cancelOrder()" id="cancelOrderButton" style="flex:1;color:white;display:block">Cancel Order</button>
     <div id="categoriesDiv" style="flex:4">
     </div>
     <div id="paymentDiv" style="flex:4;display: none;flex-direction: column;">
