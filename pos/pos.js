@@ -85,6 +85,7 @@ function init() {
                 loggedUser=user;
                 accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
             } else {
+                console.log("received invalid userinfo => go signin");
                 document.location = "signin.html";
             }
         }).catch(function () { document.location = "signin.html"; })
