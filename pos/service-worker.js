@@ -1,4 +1,5 @@
-var cacheName = "pwa-pos_0.21.20"
+var cacheName = "pwa-pos_0.21.21"
+var currentUser;
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -58,6 +59,8 @@ var filesToCache = [
 ];
 
 var k = Array.apply(null, { length: 64 }).map((v, i) => (0 | (Math.abs(Math.sin(i + 1)) * 4294967296)));
+
+console.log("executing service worker script currentUser="+currentUser);
 
 function encrypt(str) {
   var b, c, d, j, x = [], str2 = unescape(encodeURI(str)),
@@ -153,16 +156,15 @@ self.addEventListener('message', function (e) {
         //if(encryptedUsername.substring(encryptedUsername.length-2)!=encryptedPassword.substring(encryptedPassword.length-2)){
         //  alert("invalid username or password");
         //}
-        let currentUser = {};
+        currentUser = {};
         currentUser.username=e.data.username;
         currentUser.password=e.data.password;
         currentUser.admin=(e.data.password.length==40);
-        localStorage.setItem("currentUser",currentUser);
         console.log("logged in user "+JSON.stringify(currentUser)+" event="+JSON.stringify(e));
         e.ports[0].postMessage("signedIn");
         break;
       case "signout":
-        localStorage.setItem("currentUser",null);
+        currentUser=null;
         break;
       default: console.log("unknown action");
     }
@@ -170,7 +172,6 @@ self.addEventListener('message', function (e) {
 });
 
 self.addEventListener('fetch', function (e) {
-  let currentUser=  localStorage.getItem("currentUser");
   console.log('[' + cacheName + '] Fetch '+ e.request.url+' currentUser='+currentUser);
   if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)
   && (e.request.url.indexOf("unregister.html")==-1) && (e.request.url.indexOf("signin.html")==-1)){

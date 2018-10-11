@@ -58,7 +58,8 @@ function signout() {
 
 function init() {
     setInterval(function () {
-        document.getElementById("dateTime").innerHTML = new Date();
+        let curTime=new Date();
+        document.getElementById("dateTime").innerHTML = curTime.toLocaleString();
     }, 1000);
     orderStore.init(resetGui);
     productStore.listProducts( products => {
