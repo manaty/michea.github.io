@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.21.46"
+var cacheName = "pwa-pos_0.22.0"
 var currentUser;
 var filesToCache = [
   '/pos/',
@@ -39,6 +39,7 @@ var filesToCache = [
   '/pos/css/vanilla-dataTables.css',
   '/pos/css/materialdesignicons.min.css',
   '/pos/css/materialdesignicons.min.css.map',
+  '/pos/css/_reboot.scss',
   '/pos/img/0.01coin.jpg',
   '/pos/img/0.05coin.jpg',
   '/pos/img/0.25coin.jpg',
@@ -54,7 +55,12 @@ var filesToCache = [
   '/pos/img/logo.png',
   '/pos/img/logo512.png',
   '/pos/img/1000php.jpg',
-  '/pos/img/receipt.png'
+  '/pos/img/receipt.png',
+  '/pos/fonts/materialdesignicons-webfont.eot',
+  '/pos/fonts/materialdesignicons-webfont.svg',
+  '/pos/fonts/materialdesignicons-webfont.ttf',
+  '/pos/fonts/materialdesignicons-webfont.woff',
+  '/pos/fonts/materialdesignicons-webfont.woff2'
 ];
 
 var k = Array.apply(null, { length: 64 }).map((v, i) => (0 | (Math.abs(Math.sin(i + 1)) * 4294967296)));
