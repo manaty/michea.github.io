@@ -154,7 +154,7 @@ class InventoryStore{
     }
 
     listInventorys(callback){
-        console.log("listInventorys");
+        //console.log("listInventorys");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let orderStore = transaction.objectStore(this.name);
         let openCursorRequest = orderStore.openCursor();
@@ -172,7 +172,7 @@ class InventoryStore{
     }
     
     listInventorysAsRows(callback){
-        console.log("listInventorysAsRows");
+        //console.log("listInventorysAsRows");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let orderStore = transaction.objectStore(this.name);
         let openCursorRequest = orderStore.openCursor();
@@ -195,7 +195,7 @@ class InventoryStore{
         let inventoryStore = transaction.objectStore(this.name);
         let inventoryRequest=inventoryStore.get(inventoryNumber);
         inventoryRequest.onsuccess=function(event){
-            console.log("found inventory with number "+inventoryNumber);
+            //console.log("found inventory with number "+inventoryNumber);
             if(inventoryRequest.result){
                 foundcallback(Inventory.deserializeJson(inventoryRequest.result));
             } else {
@@ -216,7 +216,7 @@ class InventoryStore{
         let inventoryStore = transaction.objectStore(this.name);
         let inventoryRequest=inventoryStore.put(inventory);
         inventoryRequest.onsuccess=function(){
-                console.log('inventory successfully stored');
+                //console.log('inventory successfully stored');
                 if(callback){
                     callback(inventory);
                 }
@@ -233,7 +233,7 @@ class InventoryStore{
         let inventoryStore = transaction.objectStore(this.name);
         let inventoryRequest=inventoryStore.put(this.currentInventory);
         inventoryRequest.onsuccess=function(){
-                console.log('inventory successfully closed');
+                //console.log('inventory successfully closed');
                 if(callback){
                     callback(this.currentInventory);
                 }

@@ -63,7 +63,7 @@ function init() {
     }, 1000);
     orderStore.init(resetGui);
     productStore.listProducts( products => {
-        console.log("adding "+products.length+ " products to manualProductDatalist");
+        //console.log("adding "+products.length+ " products to manualProductDatalist");
         products.forEach(function(product){
             //if(isNaN(product.code)){
                 var option = document.createElement('option');
@@ -93,7 +93,7 @@ function init() {
 var previousSelectedCategory = undefined;
 var categoryProducts = {};
 function selectCategory(event) {
-    console.log("select " + this.code);
+    //console.log("select " + this.code);
     if (this.code && !categoryProducts[this.code]) {
         productStore.listByCatetogry(this.code, addProductsToCategoryDiv);
     }
@@ -176,7 +176,7 @@ function productCodeChanged(value) {
         return;
     }
     lastProductUpdate = Date.now();
-    console.log("productCodeChanged " + value + " lastProductUpdate=" + lastProductUpdate);
+    //console.log("productCodeChanged " + value + " lastProductUpdate=" + lastProductUpdate);
     if (value) {
         setTimeout(productCodeChangedTimeout, 150, value);
     }
@@ -238,10 +238,10 @@ function productCodeChangedTimeout() {
     if (timeDiff > 100) {
         lastProductUpdate = now;
         productCode = document.getElementById('productNumber').value;
-        console.log("adding item for product " + productCode);
+        //console.log("adding item for product " + productCode);
         addItem(productCode);
     } else {
-        console.log("timeDiff=" + timeDiff);
+        //console.log("timeDiff=" + timeDiff);
     }
 }
 
@@ -336,12 +336,12 @@ function resetGui() {
 }
 
 function addItem(productCode) {
-    console.log("addItem productCode=" + productCode);
+    //console.log("addItem productCode=" + productCode);
     productStore.lookup(productCode, productFoundCallback, productNotFoundCallback);
 }
 
 function productFoundCallback(product) {
-    console.log("addItemCallback" + JSON.stringify(product));
+    //console.log("addItemCallback" + JSON.stringify(product));
     let cartItem = document.getElementById("cart_item_" + product.code);
     if (cartItem) {
         incQuantity(cartItem.getAttribute("index"));
@@ -363,18 +363,12 @@ function productNotFoundCallback(productCode) {
         let up = prompt("price", "");
         unitPrice = parseFloat(up).toFixed(2);
     }
-    console.log("unitprice i=" + i);
+    //console.log("unitprice i=" + i);
     if (i == 0) {
         alert("cannot add product with price 0");
         return;
     }
     productStore.addProduct(productCode, description, unitPrice, 1, null, productFoundCallback);
-}
-
-function productNumberChanged(val) {
-    if (val.length == 8) {
-        console.log("Product to add= " + val);
-    }
 }
 
 function refreshPaymentView() {

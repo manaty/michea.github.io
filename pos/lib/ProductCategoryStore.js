@@ -4,7 +4,7 @@ class ProductCategory{
         this.description=description;
         this.parentCategory=parentCategory;
         this.order=(order)?order:1;
-        console.log(ProductCategory.toRow(this).join(" "));
+        //console.log(ProductCategory.toRow(this).join(" "));
     }
     
     static fromObject(val){
@@ -17,7 +17,7 @@ class ProductCategory{
 
 class ProductCategoryStore {
     constructor(dataStore) {
-        console.log("initialize productCategory store");
+        //console.log("initialize productCategory store");
         this.name='ProductCategory';
         this.keyPath='code';
         dataStore.addStore(this);
@@ -25,7 +25,7 @@ class ProductCategoryStore {
     }
 
     listProductCategories(callback){
-        console.log("listProductCategories");
+        //console.log("listProductCategories");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let productStore = transaction.objectStore(this.name);
         let openCursorRequest = productStore.openCursor();
@@ -61,7 +61,7 @@ class ProductCategoryStore {
     }
 
     listProductCategoriesAsMap(callback){
-        console.log("listProductCategoriesAsMap");
+        //console.log("listProductCategoriesAsMap");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let productCategoryStore = transaction.objectStore(this.name);
         let openCursorRequest = productCategoryStore.openCursor();
@@ -115,12 +115,12 @@ class ProductCategoryStore {
 
 
     lookup(productCategoryCode,foundcallback,notfoundcallback){
-        console.log("lookup product category code="+productCategoryCode);
+        //console.log("lookup product category code="+productCategoryCode);
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let productCategoryStore = transaction.objectStore(this.name);
         let productCategoryRequest=productCategoryStore.get(productCategoryCode);
         productCategoryRequest.onsuccess=function(event){
-            console.log("found product with code "+productCategoryCode);
+            //console.log("found product with code "+productCategoryCode);
             if(productCategoryRequest.result){
                 foundcallback(productRequest.result);
             } else {
@@ -164,7 +164,7 @@ class ProductCategoryStore {
         let productCategoryStore = transaction.objectStore(this.name);
         let productCategoryRequest=productCategoryStore.put(productCategory);
         productCategoryRequest.onsuccess=function(){
-                console.log('product category successfully added');
+                //console.log('product category successfully added');
                 if(callback){
                     callback(productCategory);
                 }
@@ -187,7 +187,7 @@ class ProductCategoryStore {
         let productCategoryRequest=productCategoryStore.delete(code);
         productCategoryRequest.onsuccess=function(event){
             if(event.type=="success"){
-                console.log('product category successfully deleted');
+                //console.log('product category successfully deleted');
                 if(callback){
                     callback();
                 }

@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="utf-8"/>
-  <link rel="apple-touch-icon" sizes="180x180" href="./img/icons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="./img/icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="./img/icons/favicon-16x16.png">
-  <link rel="mask-icon" href="./img/icons/safari-pinned-tab.svg" color="#5bbad5">
-  <meta name="msapplication-TileImage" content="./img/logo.png"/>
-  <meta name="msapplication-TileColor" content="#2F3BA2"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#2F3BA2"/>
-  <link rel="manifest" href="./manifest.json"/>
-  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css"/>
-  <link rel="stylesheet" type="text/css" href="./css/_reboot.scss"/>
-  <title>Michea Pos</title>
-  <style>
-html, body {
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./img/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./img/icons/favicon-16x16.png">
+    <link rel="mask-icon" href="./img/icons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileImage" content="./img/logo.png" />
+    <meta name="msapplication-TileColor" content="#2F3BA2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#2F3BA2" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/_reboot.scss" />
+    <title>Michea Pos</title>
+    <style>
+        html, body {
   height: 100%;
 }
 .breadcrumbs{
@@ -25,7 +26,7 @@ html, body {
 .breadcrumbs > span {
   margin:5px 2px;
   padding:10px 3px;
-  background-color:rgb(134, 172, 66);
+  background-color:rgb(231, 75, 25);
 }
 
 .breadcrumbs > span > a {
@@ -52,7 +53,7 @@ html, body {
 }
 
 button {
-    background-color: rgb(134, 172, 66);
+    background-color: rgb(231, 75, 25);
     color: white;
     padding: 5px 10px;
     margin: 3px 0;
@@ -64,12 +65,12 @@ button {
 
 #paymentButton{
     font-size: 1.5em;
-    background-color: rgb(64, 87, 24);
+    background-color: rgb(137, 58, 15);
 }
 
 #printReceiptButton{
     font-size: 1.5em;
-    background-color: rgb(64, 87, 24);
+    background-color: rgb(137, 58, 15);
 }
 
 .billContainer {
@@ -109,180 +110,188 @@ button {
 
 .total_price_table{
     font-size: 1.5em;
-    background-color:rgb(134, 172, 66);
+    background-color:rgb(231, 75, 25);
+    color: white;
+    font-size: 2em;
     padding: 10px;
     width:100%;
 }
   </style>
-  <script>
-    loadScript = function(url) {
-      return new Promise(function(resolve, reject) {
-        var element = document.createElement('script');
-        element.onload = function() {
-          console.log("loaded "+url);
-          resolve(url);
+    <script>
+        loadScript = function (url) {
+            return new Promise(function (resolve, reject) {
+                var element = document.createElement('script');
+                element.onload = function () {
+                    console.log("loaded " + url);
+                    resolve(url);
+                };
+                element.onerror = function () {
+                    console.log("failed loading " + url);
+                    reject(url);
+                };
+                //element.async = true;
+                element['src'] = url;
+                document['body'].appendChild(element);
+            });
         };
-        element.onerror = function() {
-          console.log("failed loading "+url);
-          reject(url);
-        };
-        //element.async = true;
-        element['src'] = url;
-        document['body'].appendChild(element);
-      });
-    };
-  
-    window.onload=function(e){
-        navigator.serviceWorker.register('service-worker.js');
-        Promise.all(["lib/DataStore.js","lib/ConfigurationStore.js"
-                ,"lib/ProductStore.js","lib/ProductCategoryStore.js","lib/OrderStore.js"
-                ,"lib/PurchaseStore.js","lib/InventoryStore.js","printReceipt.js"].map(loadScript)).then(
-                    function(){
+
+        window.onload = function (e) {
+            navigator.serviceWorker.register('service-worker.js');
+            Promise.all(["lib/DataStore.js", "lib/ConfigurationStore.js"
+                , "lib/ProductStore.js", "lib/ProductCategoryStore.js", "lib/OrderStore.js"
+                , "lib/PurchaseStore.js", "lib/InventoryStore.js", "printReceipt.js"].map(loadScript)).then(
+                    function () {
                         console.log("all script loaded, we load pos");
                         loadScript("pos.js");
                     }
-                ).catch(function() {
+                ).catch(function () {
                     console.log('error while loading scripts');
                 });
-    }
-  </script>
+        }
+    </script>
 
 </head>
+
 <body style="display: flex;flex-direction: column">
- <div class="breadcrumbs" style="display:block;">
-                <span><a href="catalog.html">Catalog</a></span>
-                <span><a href="orders.html">Orders</a></span>
-                <span><a href="purchases.html">Purchases</a></span>
-                <span><a href="configuration.html">Setting</a></span>
-                <span style="flex:1;">
-                  <input type="text" placeholder="Search Order" id="orderSearch"/></span>
-                <span id="accountDiv"></span>
-                <span id="dateTime"></span>
- </div>       
-<div style="display: flex;flex:1;">
-<div style="display: flex;flex-direction: column;flex:1">
-    <div>
-        <label for="productNumber">Scan barcode</label>
-        <input id="productNumber"   placeholder="00001" 
-        oninput="productCodeChanged(this.value)" onfocus="this.value=''"/>
+    <div class="breadcrumbs" style="display:block;">
+        <span><a href="catalog.html">Catalog</a></span>
+        <span><a href="orders.html">Orders</a></span>
+        <span><a href="purchases.html">Purchases</a></span>
+        <span><a href="configuration.html">Setting</a></span>
+        <span style="flex:1;">
+            <input type="text" placeholder="Search Order" id="orderSearch" /></span>
+        <span id="accountDiv"></span>
+        <span id="dateTime"></span>
     </div>
-    <div>
-        <label for="manualProductNumber">Manual barcode</label>
-        <input id="manualProductNumber"  list="manualProductDatalist"/>
-        <datalist id="manualProductDatalist"></datalist>
-    </div>
-    <div style="display: flex;flex-direction: row;flex:1">
-    <button onclick="payOrder()" id="paymentButton" style="flex:1;">Payment</button>
-    <button onclick="cancelOrder()" id="cancelOrderButton">Cancel Order</button>
-    </div>
-    <div id="categoriesDiv" style="flex:4">
-    </div>
-    <div id="paymentDiv" style="flex:4;display: none;flex-direction: column;">
-      <div id="bills" style="display: flex;flex:1" >
-            <div onclick="registerPaymentRecord('bill',1000)" class="billContainer" style="background-image: url('./img/1000php.jpg')">
-                <div id="bill1000">0</div>
+    <div style="display: flex;flex:1;">
+        <div style="display: flex;flex-direction: column;flex:1">
+            <div>
+                <label for="productNumber">Scan barcode</label>
+                <input id="productNumber" placeholder="00001" oninput="productCodeChanged(this.value)" onfocus="this.value=''" />
             </div>
-            <div onclick="registerPaymentRecord('bill',500)" class="billContainer" style="background-image: url('./img/500php.jpeg')">
-                <div id="bill500">0</div>
+            <div>
+                <label for="manualProductNumber">Manual barcode</label>
+                <input id="manualProductNumber" list="manualProductDatalist" />
+                <datalist id="manualProductDatalist"></datalist>
             </div>
-            <div onclick="registerPaymentRecord('bill',200)" class="billContainer" style="background-image: url('./img/200php.jpeg')">
-                <div id="bill200">0</div>
+            <div style="display: flex;flex-direction: row;flex:1">
+                <button onclick="payOrder()" id="paymentButton" style="flex:1;">Payment</button>
+                <button onclick="cancelOrder()" id="cancelOrderButton">Cancel</button>
             </div>
-      </div>
-      <div id="bills2" style="display: flex;flex:1" >
-            <div onclick="registerPaymentRecord('bill',100)" class="billContainer" style="background-image: url('./img/100php.jpg')">
-                <div id="bill100">0</div>
+            <div id="categoriesDiv" style="flex:4">
             </div>
-            <div onclick="registerPaymentRecord('bill',50)" class="billContainer" style="background-image: url('./img/50php.jpeg')">
-                <div id="bill50">0</div>
-            </div>
-            <div onclick="registerPaymentRecord('bill',20)" class="billContainer" style="background-image: url('./img/20php.jpg')">
-                <div id="bill20">0</div>
-            </div>
-                        
-      </div>
-      <div id="coins" style="display: flex;flex:1">
-            <div onclick="registerPaymentRecord('coin',10)" class="billContainer" style="background-image: url('./img/10coin.jpg')">
-                <div id="coin10">0</div>
-            </div>
-            <div onclick="registerPaymentRecord('coin',5)" class="billContainer" style="background-image: url('./img/5coin.jpg')">
-                <div id="coin5">0</div>
-            </div>
-            <div onclick="registerPaymentRecord('coin',1)" class="billContainer" style="background-image: url('./img/1coin.jpg')">
-                <div id="coin1">0</div>
-            </div>
-            <div onclick="registerPaymentRecord('coin',0.25)" class="billContainer" style="background-size: 80%;background-image: url('./img/0.25coin.jpg')">
-                <div id="coin0.25">0</div>
-            </div>
-            <div onclick="registerPaymentRecord('coin',0.05)" class="billContainer" style="background-size: 80%;background-image: url('./img/0.05coin.jpg')">
-                <div id="coin0.05">0</div>
-            </div>
-            <div onclick="registerPaymentRecord('coin',0.01)" class="billContainer" style="background-size: 80%;background-image: url('./img/0.01coin.jpg')">
-                <div id="coin0.01">0</div>
-            </div>
-      </div>
-      <div style="flex:1;display:flex;flex-direction:row;font-size: 1.5em">
-        <div style="flex:1">
-            <span style="font-weight:bold">Total paid :&#8369;</span>
-            <input id="totalPaid" value="0.00"></span>
-        </div>
-        <div style="flex:1">
-            <span style="font-weight:bold">Change</span>
-            <span id="totalChange" style="font-weight: bold">&#8369;0.00</span>
-        </div>
-    </div>
-      <div style="flex:1;display:flex;flex-direction:row">
-        <button onclick="printReceipt()" id="printReceiptButton" style="display:none;flex: 1"> Print Receipt </button>
-        <button onclick="undoPaymentRecord()" id="undoPaymentButton">Undo</button>
-        <button onclick="resetPaymentRecords()" id="resetPaymentButton">Reset</button>
-      </div>
-    </div>
+            <div id="paymentDiv" style="flex:4;display: none;flex-direction: column;">
+                <div id="bills" style="display: flex;flex:1">
+                    <div onclick="registerPaymentRecord('bill',1000)" class="billContainer" style="background-image: url('./img/1000php.jpg')">
+                        <div id="bill1000">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('bill',500)" class="billContainer" style="background-image: url('./img/500php.jpeg')">
+                        <div id="bill500">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('bill',200)" class="billContainer" style="background-image: url('./img/200php.jpeg')">
+                        <div id="bill200">0</div>
+                    </div>
+                </div>
+                <div id="bills2" style="display: flex;flex:1">
+                    <div onclick="registerPaymentRecord('bill',100)" class="billContainer" style="background-image: url('./img/100php.jpg')">
+                        <div id="bill100">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('bill',50)" class="billContainer" style="background-image: url('./img/50php.jpeg')">
+                        <div id="bill50">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('bill',20)" class="billContainer" style="background-image: url('./img/20php.jpg')">
+                        <div id="bill20">0</div>
+                    </div>
 
-</div>
-<div style="flex: 1">
-    <table class="order_header">
-            <tr>
-                <td class="desc-td" style="font-weight: bold">Order# :</td>
-                <td id="orderNumber" style="font-weight: bold"></td>
-            </tr>
-            <tr id="cancelledOrderNumberTR">
-                <td class="desc-td" style="font-weight: bold">Cancelled# :</td>
-                <td id="cancelledOrderNumber" style="font-weight: bold"></td>
-            </tr>
-    </table>
-    <table class="price_table">
-      <thead>
-        <tr style="font-weight: bold">
-            <th class="code-td">Code</th>
-            <th class="desc-td">Description</th>
-            <th class="unit-td">Unit price</th>
-            <th class="qty-td" style="font-weight: bold">Quantity</th>
-            <th  class="price-td" style="font-weight: bold">Amount</th>
-            <th>Action</th>
-        </tr>
-      </thead>
-      <tbody  id="cart">
+                </div>
+                <div id="coins" style="display: flex;flex:1">
+                    <div onclick="registerPaymentRecord('coin',10)" class="billContainer" style="background-image: url('./img/10coin.jpg')">
+                        <div id="coin10">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('coin',5)" class="billContainer" style="background-image: url('./img/5coin.jpg')">
+                        <div id="coin5">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('coin',1)" class="billContainer" style="background-image: url('./img/1coin.jpg')">
+                        <div id="coin1">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('coin',0.25)" class="billContainer" style="background-size: 80%;background-image: url('./img/0.25coin.jpg')">
+                        <div id="coin0.25">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('coin',0.05)" class="billContainer" style="background-size: 80%;background-image: url('./img/0.05coin.jpg')">
+                        <div id="coin0.05">0</div>
+                    </div>
+                    <div onclick="registerPaymentRecord('coin',0.01)" class="billContainer" style="background-size: 80%;background-image: url('./img/0.01coin.jpg')">
+                        <div id="coin0.01">0</div>
+                    </div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:row;font-size: 1.5em">
+                    <div style="flex:1">
+                        <span style="font-weight:bold">Total paid :&#8369;</span>
+                        <input id="totalPaid" value="0.00"></span>
+                    </div>
+                    <div style="flex:1">
+                        <span style="font-weight:bold">Change</span>
+                        <span id="totalChange" style="font-weight: bold">&#8369;0.00</span>
+                    </div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:row">
+                    <button onclick="printReceipt()" id="printReceiptButton" style="display:none;flex: 1"> Print
+                        Receipt </button>
+                    <button onclick="undoPaymentRecord()" id="undoPaymentButton">Undo</button>
+                    <button onclick="resetPaymentRecords()" id="resetPaymentButton">Reset</button>
+                </div>
+            </div>
 
-      </tbody>
-    </table>
-    
-    <br/>
-    <table class="total_price_table">
-        <tr>
-            <td class="desc-td" style="font-weight: bold">Total price</td>
-            <td id="totalPrice" class="price-td" style="font-weight: bold">&#8369;0.00</td>
-        </tr>
-        <tr id="closedTotalPaidTR" style="display:none">
-            <td class="desc-td" style="font-weight: bold">Amount paid</td>
-            <td id="closedTotalPaid" class="price-td" style="font-weight: bold">&#8369;0.00</td>
-        </tr>
-        <tr  id="closedTotalChangeTR" style="display:none">
-            <td class="desc-td" style="font-weight: bold">Change given</td>
-            <td id="closedTotalChange" class="price-td" style="font-weight: bold">&#8369;0.00</td>
-        </tr>
-    </table>
+        </div>
+        <div style="flex: 1;display: flex;flex-direction: column">
+            <div>
+                <table class="order_header">
+                    <tr>
+                        <td class="desc-td" style="font-weight: bold">Order# :</td>
+                        <td id="orderNumber" style="font-weight: bold"></td>
+                    </tr>
+                    <tr id="cancelledOrderNumberTR">
+                        <td class="desc-td" style="font-weight: bold">Cancelled# :</td>
+                        <td id="cancelledOrderNumber" style="font-weight: bold"></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table class="price_table" style="flex:1">
+                    <thead>
+                        <tr style="font-weight: bold">
+                            <th class="code-td">Code</th>
+                            <th class="desc-td">Description</th>
+                            <th class="unit-td">Unit price</th>
+                            <th class="qty-td" style="font-weight: bold">Quantity</th>
+                            <th class="price-td" style="font-weight: bold">Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart">
+
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <table class="total_price_table">
+                    <tr>
+                        <td class="desc-td" style="font-weight: bold">Total price</td>
+                        <td id="totalPrice" class="price-td" style="font-weight: bold">&#8369;0.00</td>
+                    </tr>
+                    <tr id="closedTotalPaidTR" style="display:none">
+                        <td class="desc-td" style="font-weight: bold">Amount paid</td>
+                        <td id="closedTotalPaid" class="price-td" style="font-weight: bold">&#8369;0.00</td>
+                    </tr>
+                    <tr id="closedTotalChangeTR" style="display:none">
+                        <td class="desc-td" style="font-weight: bold">Change given</td>
+                        <td id="closedTotalChange" class="price-td" style="font-weight: bold">&#8369;0.00</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
     </div>
-</div>
-</div>
 </body>
+
 </html>

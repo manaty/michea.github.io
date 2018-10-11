@@ -195,7 +195,7 @@ class Order{
 
 class OrderStore{
     constructor(dataStore) {
-        console.log("create order store class instance");
+        //console.log("create order store class instance");
         this.name='Order';
         this.keyPath='orderNumber'
         dataStore.addStore(this);
@@ -205,7 +205,7 @@ class OrderStore{
     }
 
     init(callback){
-        console.log("init order store instance db="+this.dataStore.database);
+        //console.log("init order store instance db="+this.dataStore.database);
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let orderStore = transaction.objectStore(this.name);
         let openCursorRequest = orderStore.openCursor(null, 'prev');
@@ -228,7 +228,7 @@ class OrderStore{
     }
 
     listOrders(callback){
-        console.log("listOrders");
+        //console.log("listOrders");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let orderStore = transaction.objectStore(this.name);
         let openCursorRequest = orderStore.openCursor();
@@ -246,7 +246,7 @@ class OrderStore{
     }
     
     listOrdersAsRows(callback){
-        console.log("listOrdersAsRows");
+        //console.log("listOrdersAsRows");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let orderStore = transaction.objectStore(this.name);
         let openCursorRequest = orderStore.openCursor();
@@ -269,7 +269,7 @@ class OrderStore{
         let orderStore = transaction.objectStore(this.name);
         let orderRequest=orderStore.get(orderNumber);
         orderRequest.onsuccess=function(event){
-            console.log("found order with number "+orderNumber);
+            //console.log("found order with number "+orderNumber);
             if(orderRequest.result){
                 foundcallback(Order.deserializeJson(orderRequest.result));
             } else {
@@ -290,7 +290,7 @@ class OrderStore{
         let orderStore = transaction.objectStore(this.name);
         let orderRequest=orderStore.put(order);
         orderRequest.onsuccess=function(){
-                console.log('order successfully stored');
+                //console.log('order successfully stored');
                 if(callback){
                     callback(order);
                 }
@@ -308,7 +308,7 @@ class OrderStore{
         let orderStore = transaction.objectStore(this.name);
         let orderRequest=orderStore.put(order);
         orderRequest.onsuccess=function(){
-                console.log('order successfully closed');
+                //console.log('order successfully closed');
                 if(callback){
                     callback(order);
                 }

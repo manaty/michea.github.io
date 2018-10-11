@@ -163,7 +163,7 @@ class PurchaseStore{
     }
 
     listPurchases(callback){
-        console.log("listPurchases");
+        //console.log("listPurchases");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let orderStore = transaction.objectStore(this.name);
         let openCursorRequest = orderStore.openCursor();
@@ -181,7 +181,7 @@ class PurchaseStore{
     }
     
     listPurchasesAsRows(callback){
-        console.log("listPurchasesAsRows");
+        //console.log("listPurchasesAsRows");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let orderStore = transaction.objectStore(this.name);
         let openCursorRequest = orderStore.openCursor();
@@ -204,7 +204,7 @@ class PurchaseStore{
         let purchaseStore = transaction.objectStore(this.name);
         let purchaseRequest=purchaseStore.get(purchaseNumber);
         purchaseRequest.onsuccess=function(event){
-            console.log("found purchase with number "+purchaseNumber);
+            //console.log("found purchase with number "+purchaseNumber);
             if(purchaseRequest.result){
                 foundcallback(Purchase.deserializeJson(purchaseRequest.result));
             } else {
@@ -225,7 +225,7 @@ class PurchaseStore{
         let purchaseStore = transaction.objectStore(this.name);
         let purchaseRequest=purchaseStore.put(purchase);
         purchaseRequest.onsuccess=function(){
-                console.log('purchase successfully stored');
+                //console.log('purchase successfully stored');
                 if(callback){
                     callback(purchase);
                 }
@@ -242,7 +242,7 @@ class PurchaseStore{
         let purchaseStore = transaction.objectStore(this.name);
         let purchaseRequest=purchaseStore.put(this.currentPurchase);
         purchaseRequest.onsuccess=function(){
-                console.log('purchase successfully closed');
+                //console.log('purchase successfully closed');
                 if(callback){
                     callback(this.currentPurchase);
                 }

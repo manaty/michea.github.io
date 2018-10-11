@@ -7,7 +7,7 @@ class Product{
         this.creationDate=new Date();
         this.category=category;
         this.order=order;
-        console.log(Product.toRow(this).join(" "));
+        //console.log(Product.toRow(this).join(" "));
     }
     
     static fromObject(val){
@@ -54,7 +54,7 @@ class ProductStore {
     }
 
     listByCatetogry(category,callback){
-        console.log("listProducts by category :"+category);
+        //console.log("listProducts by category :"+category);
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let productStore = transaction.objectStore(this.name);
         let index = productStore.index('categoryIndex');
@@ -73,7 +73,7 @@ class ProductStore {
     }
     
     listProductAsRows(callback){
-        console.log("listProductAsRows");
+        //console.log("listProductAsRows");
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let productStore = transaction.objectStore(this.name);
         let openCursorRequest = productStore.openCursor();
@@ -92,12 +92,12 @@ class ProductStore {
 
 
     lookup(productCode,foundcallback,notfoundcallback){
-        console.log("lookup product code="+productCode);
+        //console.log("lookup product code="+productCode);
         let transaction = this.dataStore.database.transaction(this.name,'readonly');
         let productStore = transaction.objectStore(this.name);
         let productRequest=productStore.get(productCode);
         productRequest.onsuccess=function(event){
-            console.log("found product with code "+productCode);
+            //console.log("found product with code "+productCode);
             if(productRequest.result){
                 foundcallback(productRequest.result);
             } else {
@@ -128,7 +128,7 @@ class ProductStore {
                     successes++;
                 }
             } else {
-                console.log('update complete');
+                //console.log('update complete');
                 if(callback){
                     callback(successes,errors);
                 }
@@ -141,7 +141,7 @@ class ProductStore {
         let productStore = transaction.objectStore(this.name);
         let productRequest=productStore.put(product);
         productRequest.onsuccess=function(){
-                console.log('product successfully added');
+                //console.log('product successfully added');
                 if(callback){
                     callback(product);
                 }
@@ -166,7 +166,7 @@ class ProductStore {
         let productRequest=productStore.delete(code);
         productRequest.onsuccess=function(event){
             if(event.type=="success"){
-                console.log('product successfully deleted');
+                //console.log('product successfully deleted');
                 if(callback){
                     callback();
                 }
