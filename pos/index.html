@@ -16,7 +16,7 @@
   <title>Michea Pos</title>
   <style>
 html, body {
-  height: 90%;
+  height: 100%;
 }
 .breadcrumbs{
     min-height: 60px;
@@ -63,10 +63,12 @@ button {
 }
 
 #paymentButton{
-    background-color: rgb(134, 172, 66);
+    font-size: 1.5em;
+    background-color: rgb(64, 87, 24);
 }
 
-#cancelOrderButton{
+#printReceiptButton{
+    font-size: 1.5em;
     background-color: rgb(64, 87, 24);
 }
 
@@ -92,7 +94,7 @@ button {
 .categoriesDiv{
     width: 100%;
     height: 100%;
-    border: 1px solid red;
+    border: 1px solid rgba(51, 51, 51, 0.5);
     display: none;
 }
 
@@ -106,10 +108,10 @@ button {
 }
 
 .total_price_table{
-    margin:0px 0px 0px auto;
     font-size: 1.5em;
     background-color:rgb(134, 172, 66);
     padding: 10px;
+    width:100%;
 }
   </style>
   <script>
@@ -169,8 +171,10 @@ button {
         <input id="manualProductNumber"  list="manualProductDatalist"/>
         <datalist id="manualProductDatalist"></datalist>
     </div>
-    <button onclick="payOrder()" id="paymentButton" style="flex:1; color:white;display:block">Payment</button>
-    <button onclick="cancelOrder()" id="cancelOrderButton" style="flex:1;color:white;display:block">Cancel Order</button>
+    <div style="display: flex;flex-direction: row;flex:1">
+    <button onclick="payOrder()" id="paymentButton" style="flex:1;">Payment</button>
+    <button onclick="cancelOrder()" id="cancelOrderButton">Cancel Order</button>
+    </div>
     <div id="categoriesDiv" style="flex:4">
     </div>
     <div id="paymentDiv" style="flex:4;display: none;flex-direction: column;">
@@ -217,20 +221,20 @@ button {
                 <div id="coin0.01">0</div>
             </div>
       </div>
-      <div style="flex:1">
-        <span style="font-weight: bold">Total paid :&#8369;</span>
-        <input id="totalPaid" value="0.00"></span>
-      </div>
-      <div style="flex:1">
-        <span style="font-weight: bold">Change</span>
-        <span id="totalChange" style="font-weight: bold">&#8369;0.00</span>
-      </div>
-      <div style="flex:1">
-          <button onclick="undoPaymentRecord()" id="undoPaymentButton">Undo</button>
-          <button onclick="resetPaymentRecords()" id="resetPaymentButton">Reset</button>
-      </div>
-      <div>
-          <button onclick="printReceipt()" id="printReceiptButton" style="display:none;"> Print Receipt </button>
+      <div style="flex:1;display:flex;flex-direction:row;font-size: 1.5em">
+        <div style="flex:1">
+            <span style="font-weight:bold">Total paid :&#8369;</span>
+            <input id="totalPaid" value="0.00"></span>
+        </div>
+        <div style="flex:1">
+            <span style="font-weight:bold">Change</span>
+            <span id="totalChange" style="font-weight: bold">&#8369;0.00</span>
+        </div>
+    </div>
+      <div style="flex:1;display:flex;flex-direction:row">
+        <button onclick="printReceipt()" id="printReceiptButton" style="display:none;flex: 1"> Print Receipt </button>
+        <button onclick="undoPaymentRecord()" id="undoPaymentButton">Undo</button>
+        <button onclick="resetPaymentRecords()" id="resetPaymentButton">Reset</button>
       </div>
     </div>
 
