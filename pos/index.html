@@ -139,7 +139,7 @@ button {
             navigator.serviceWorker.register('service-worker.js');
             Promise.all(["lib/DataStore.js", "lib/ConfigurationStore.js"
                 , "lib/ProductStore.js", "lib/ProductCategoryStore.js", "lib/OrderStore.js"
-                , "lib/PurchaseStore.js", "lib/InventoryStore.js", "printReceipt.js"].map(loadScript)).then(
+                , "lib/PurchaseStore.js", "lib/InventoryStore.js","lib/JsBarcode.min.js", "printReceipt.js"].map(loadScript)).then(
                     function () {
                         console.log("all script loaded, we load pos");
                         loadScript("pos.js");

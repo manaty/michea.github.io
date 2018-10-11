@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.21.38"
+var cacheName = "pwa-pos_0.21.42"
 var currentUser;
 var filesToCache = [
   '/pos/',
@@ -54,7 +54,6 @@ var filesToCache = [
   '/pos/img/logo.png',
   '/pos/img/logo512.png',
   '/pos/img/1000php.jpg',
-  '/pos/img/receipt.png',
   '/pos/img/receipt.png'
 ];
 
