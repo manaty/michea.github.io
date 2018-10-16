@@ -1,5 +1,10 @@
-var cacheName = "pwa-pos_0.22.0"
+var cacheName = "pwa-pos_0.22.2"
 var currentUser;
+const jsonoptions = {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}
 var filesToCache = [
   '/pos/',
   '/pos/index.html',
@@ -160,91 +165,94 @@ self.addEventListener('message', function (e) {
         currentUser.username=e.data.username;
         currentUser.password=e.data.password;
         currentUser.admin=(e.data.password.length==40);
-        /*console.log('[ServiceWorker] signin attempt to store in cache');
-        caches.open(cacheName).then(function (cache) {
-          let req = new Request("/pos/userInfo");
-          let resp=new Response(JSON.stringify(currentUser),{ "status" : 200 });
-          cache.put(req, resp).then(function(response){
-              console.log("logged in user "+JSON.stringify(currentUser));
-            },
-            function(error){
+        console.log('[ServiceWorker'+cacheName+'] signin attempt to store in cache');
+        let cache= await caches.open(cacheName);
+        let resp=new Response(JSON.stringify(currentUser),jsonoptions);
+        cache.put("/pos/userInfo", resp).then(
+          function(response){
+              console.log('[ServiceWorker'+cacheName+'] logged in user '+JSON.stringify(currentUser));
+              e.ports[0].postMessage("signedIn");
+          }
+          ,function(error){
               console.log("error while putting user in cache : "+currentuser+" error:"+error);
-            });
-        },function(error){
-          console.log("login error while opening cache "+cacheName);
-        });*/
-        e.ports[0].postMessage("signedIn");
+          }
+        );
         break;
       case "signout":
-      currentUser=null;
-      /*caches.open(cacheName).then(function (cache) {
-        let req = new Request("/pos/userInfo");
-        let resp=new Response("{}",{ "status" : 200 });
-        cache.put(req, resp).then(function(response){
+        currentUser=null;
+        let cache= await caches.open(cacheName)
+        cache.delete("/pos/userInfo").then(
+          function(response){
             console.log("logged out user ");
-          },
-          function(error){
-            console.log("error while putting null in cache error:"+error);
-          });
-      },function(error){
-        console.log("lougout error while opening cache "+cacheName);
-      });*/
+          }
+          ,function(error){
+              console.log("error while deleting user in cache, error:"+error);
+          }
+        );
         break;
       default: console.log("unknown action");
     }
   }
 });
 
+function getFromCacheOrfetch(req){
+  caches.match(req).then(function (response) {
+    return response;
+  },
+  function(error){ 
+    console.log("error when fetching from cache, fetching it:"+error);
+    return fetch(req);
+  });
+}
+
 self.addEventListener('fetch', function (e) {
   if(e.request.url.indexOf("userInfo")>=0){
-    console.log("retrieve user info "+(currentUser==null?"{}":JSON.stringify(currentUser)));
-    e.respondWith(new Response(currentUser==null?"{}":JSON.stringify(currentUser)));
+    console.log("retrieve user info");
+    e.respondWith(
+      caches.match(new Request("/pos/userInfo")).then(function (response) {
+        console.log('found response of user info in cache');
+        return response;
+      },function(error){
+        console.log("error when fetching response of user info from cache:"+error);
+        if(currentUser!=null){
+          console.log("but CurrentUser is still set, so we return it");
+          return new Response(JSON.stringify(currentUser));
+        } else {
+          return new Response("{}");
+        }
+      })
+    );
   }
   else if((e.request.url.indexOf("signin.html")>=0)||(e.request.url.indexOf("unregister.html")>=0)){
-    console.log("special page "+e.request.url+", serve from cache");
-    e.respondWith(
-      caches.match(e.request).then(function (response) {
-        return response ||fetch(e.request);
-      },function(error){ console.log("error when fetching from cache error:"+error)})
-    );
-  } else if((currentUser==null) && (e.request.url.indexOf(".html")!=-1)){
-    console.log("currentuser null and asking "+e.request.url+", redirecting to signin.html");
-    e.respondWith(Response.redirect('/pos/signin.html'));
+    console.log("special page "+e.request.url+", serve from cache dont check authent");
+    e.respondWith(getFromCacheOrfetch(e.request));
   } else {
     e.respondWith(
-      caches.match(e.request).then(function (response) {
-        if(response){
-         console.log("answer "+e.request.url+" with cache value:"+response.body);
-         return response
+      caches.match(new Request("/pos/userInfo")).then(
+        function (response) {
+          let resp=response.clone();
+          resp.body.text().then(
+            function(){
+              return getFromCacheOrfetch(e.request);
+            }
+            ,function(error){
+              console.log("userinfo response cannot be converted to text !?");
+              if(currentUser==null){
+                console.log("and current user is null => we redirect to signin");  
+                return Response.redirect('/pos/signin.html');
+              } else return getFromCacheOrfetch(e.request);
+            }
+          )}
+      ,function(error){
+        console.log("userinfo not found in cache");
+        if(currentUser==null){
+          console.log("and current user is null => we redirect to signin");  
+          return Response.redirect('/pos/signin.html');
         } else {
-         console.log("fetch "+e.request.url+" on network");
-         return fetch(e.request);
+          return getFromCacheOrfetch(e.request);
+        }
       }
-      },function(error){ console.log("error when fetching from cache error:"+error)})
-    );
+      )
+    )
   }
-
-/*    caches.match("/pos/userInfo").then(function (response) {
-      console.log("userInfo valure in cache:"+JSON.stringify(response));
-      if(response==null){
-        console.log("user not logged in, redirecting to signin.html");
-        e.respondWith(Response.redirect('/pos/signin.html'));
-      }else{
-        console.log()
-        caches.match(e.request).then(function (response) {
-          if(response){
-            console.log("answer with cache value:"+JSON.stringify(response));
-            return response
-          } else {
-            console.log("fetch it on network");
-            return fetch(e.request);
-          }
-        },function(error){ console.log("error when fetching from cache error:"+error)})
-      };
-     },function(error){
-        console.log("userInfo not in cache ?, redirecting to signin.html");
-        e.respondWith(Response.redirect('/pos/signin.html'));
-     }
-    )*/
-  
 });
