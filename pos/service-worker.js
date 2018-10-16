@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.22.2"
+var cacheName = "pwa-pos_0.23.0"
 var currentUser;
 const jsonoptions = {
   headers: {
