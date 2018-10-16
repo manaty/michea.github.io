@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.23.1"
+var cacheName = "pwa-pos_0.23.2"
 var currentUser;
 const jsonoptions = {
   headers: {
@@ -44,7 +44,7 @@ var filesToCache = [
   '/pos/css/vanilla-dataTables.css',
   '/pos/css/materialdesignicons.min.css',
   '/pos/css/materialdesignicons.min.css.map',
-  '/pos/css/_reboot.scss',
+  '/pos/css/reboot.scss',
   '/pos/img/0.01coin.jpg',
   '/pos/img/0.05coin.jpg',
   '/pos/img/0.25coin.jpg',
