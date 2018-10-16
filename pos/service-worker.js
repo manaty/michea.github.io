@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.23.0"
+var cacheName = "pwa-pos_0.23.1"
 var currentUser;
 const jsonoptions = {
   headers: {
@@ -180,15 +180,15 @@ self.addEventListener('message', function (e) {
         break;
       case "signout":
         currentUser=null;
-        let cache= await caches.open(cacheName)
-        cache.delete("/pos/userInfo").then(
+        caches.open(cacheName).then(function(cache){
+          cache.delete("/pos/userInfo").then(
           function(response){
             console.log("logged out user ");
           }
           ,function(error){
               console.log("error while deleting user in cache, error:"+error);
           }
-        );
+        )});
         break;
       default: console.log("unknown action");
     }
