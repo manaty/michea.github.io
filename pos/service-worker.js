@@ -197,8 +197,7 @@ self.addEventListener('message', function (e) {
 
 function getFromCacheOrfetch(req){
   caches.match(req).then(function (response) {
-    console.log("fetched from cache");
-    return response;
+    return response||fetch(req);
   },
   function(error){ 
     console.log("error when fetching from cache, fetching it:"+error);
