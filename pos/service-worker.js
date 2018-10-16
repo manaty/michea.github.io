@@ -166,17 +166,17 @@ self.addEventListener('message', function (e) {
         currentUser.password=e.data.password;
         currentUser.admin=(e.data.password.length==40);
         console.log('[ServiceWorker'+cacheName+'] signin attempt to store in cache');
-        let cache= await caches.open(cacheName);
-        let resp=new Response(JSON.stringify(currentUser),jsonoptions);
-        cache.put("/pos/userInfo", resp).then(
-          function(response){
-              console.log('[ServiceWorker'+cacheName+'] logged in user '+JSON.stringify(currentUser));
-              e.ports[0].postMessage("signedIn");
-          }
-          ,function(error){
-              console.log("error while putting user in cache : "+currentuser+" error:"+error);
-          }
-        );
+        caches.open(cacheName).then(function(cache){
+          let resp=new Response(JSON.stringify(currentUser),jsonoptions);
+          cache.put("/pos/userInfo", resp).then(
+            function(response){
+                console.log('[ServiceWorker'+cacheName+'] logged in user '+JSON.stringify(currentUser));
+                e.ports[0].postMessage("signedIn");
+            }
+            ,function(error){
+                console.log("error while putting user in cache : "+currentuser+" error:"+error);
+            }
+        )});
         break;
       case "signout":
         currentUser=null;
