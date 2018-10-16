@@ -1,4 +1,4 @@
-var cacheName = "pwa-pos_0.23.2"
+var cacheName = "pwa-pos_0.23.3"
 var currentUser;
 const jsonoptions = {
   headers: {
@@ -197,6 +197,7 @@ self.addEventListener('message', function (e) {
 
 function getFromCacheOrfetch(req){
   caches.match(req).then(function (response) {
+    console.log("fetched from cache");
     return response;
   },
   function(error){ 
