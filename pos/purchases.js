@@ -1,3 +1,10 @@
+var accountDiv = document.getElementById("accountDiv");
+let username=Authentication.getUsername();
+if(username){
+    accountDiv.innerHTML = username + ' <button onclick="Authentication.signout()">Sign Out</button>';
+} else {
+    document.location = "signin.html";
+}
 var dataStore = new DataStore("micheapos");
 var configurationStore = new ConfigurationStore(dataStore);
 var purchaseStore = new PurchaseStore(dataStore);
@@ -8,7 +15,6 @@ function init(){
 }
 
 var table;
-
 
 function createPurchaseTable(rows){
     table = new DataTable("table", {

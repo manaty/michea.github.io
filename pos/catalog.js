@@ -11,7 +11,7 @@ if(username){
         document.getElementById("pushToServer").style.display = "block";
     }
 } else {
-    document.location = "signin.html";
+   // document.location = "signin.html";
 }
 
 dataStore.openDatabase(init);
