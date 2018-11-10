@@ -33,8 +33,9 @@ function printReceipt() {
     if (orderStore.currentOrder.vipNumber) {
         mywindow.document.write(' VIP# ' + orderStore.currentOrder.vipNumber + '<br/>');
     }
-    if(loggedUser){
-        mywindow.document.write(' Cashier: ' + loggedUser.username + '<br/>');
+    let username=sessionStorage.getItem("username");
+    if(username){
+        mywindow.document.write(' Cashier: ' + username + '<br/>');
     }
 
     if (orderStore.currentOrder.items) {
