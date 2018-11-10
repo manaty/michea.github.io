@@ -17,12 +17,7 @@ if(username){
 dataStore.openDatabase(init);
 
 function init() {
-    setInterval(function () {
-        let curTime=new Date();
-        document.getElementById("dateTime").innerHTML = curTime.toLocaleTimeString();
-    }, 1000);
     productStore.listProductAsRows(createProductTable);
-
 }
 
 var table;
