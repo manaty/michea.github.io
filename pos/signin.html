@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="./css/reboot.scss"/>
     <title>Signin</title>
+    <script src="./lib/auth.js"></script>
     <style>
         body {
             margin: 0;
@@ -92,56 +93,19 @@
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" id="pos_signin_password" required><br/>
             <div class="buttonContainer">
-                <button type="submit" id="pos_signin_submit" style="visibility:hidden">SignIn</button>
+                <button type="submit" id="pos_signin_submit" >SignIn</button>
             </div>
         </form>
     </div>
 
     <script>
-
-        window.addEventListener('load', function () {
-            navigator.serviceWorker.addEventListener('controllerchange', function () {
-                console.log('serviceWorker.onControllerchange');
-                document.location.reload();
-            });
-            navigator.serviceWorker.register('service-worker.js')
-                .then(reg => {
-                    console.log('Service Worker registration succeeded. Scope is ' + reg.scope);
-                    navigator.serviceWorker.ready.then(() => {
-                        console.log('Service Worker ready controller= ' + navigator.serviceWorker.controller);
-                        document.getElementById('pos_signin_submit').style.visibility = "visible";
-                    })
-                })
-                .catch(err => {
-                    alert('Service worker Registration failed with err=' + err.message)
-                });
-        });
-
         function signin() {
             var username = document.getElementById("pos_signin_username").value;
             var password = document.getElementById("pos_signin_password").value;
             if ((!username) || username.length < 4 || (!password) || password.length <= 4) {
-                alert("invalid username or password");
-            }
-            if (navigator.serviceWorker.controller) {
-                new Promise(function (resolve, reject) {
-                    var msg_chan = new MessageChannel();
-                    msg_chan.port1.onmessage = function (event) {
-                        if (event.data.error) {
-                            reject(event.data.error);
-                        } else {
-                            resolve(event.data);
-                        }
-                    };
-                    navigator.serviceWorker.controller.postMessage(
-                        { 'action': 'signin', 'username': username, 'password': password },
-                        [msg_chan.port2]);
-                }).then(() => {
-                    console.log('signedIn so we redirect to index');
-                    document.location = "index.html";
-                });
-            } else {
-                alert("something is wrong again, call the developper");
+                alert("username or password too short");
+            } else  {
+                Authentication.signin(username,password);
             }
         }
     </script>

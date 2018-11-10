@@ -1,16 +1,17 @@
+var accountDiv = document.getElementById("accountDiv");
+let username=Authentication.getUsername();
+if(username){
+    accountDiv.innerHTML = username + ' <button onclick="Authentication.signout()">Sign Out</button>';
+} else {
+    document.location = "signin.html";
+}
 var dataStore = new DataStore("micheapos");
 var configurationStore = new ConfigurationStore(dataStore);
 var productCategoryStore = new ProductCategoryStore(dataStore);
 dataStore.openDatabase(init);
 var productCategories = new Array();
 var allCategories = new Array();
-var accountDiv = document.getElementById("accountDiv");
 
-
-function signout() {
-    navigator.serviceWorker.controller.postMessage({ 'action': 'signout' });
-    setTimeout(function () { document.location = "index.html"; }, 1000);
-}
 
 //TODO: get it from a PropertyStore
 var categoriesCheckDelay = 3600 * 1000; //one hour
@@ -24,21 +25,12 @@ function init() {
         productCategories = categorytree;
         allCategories = allcategories;
     });
-    fetch("/pos/userInfo").then(response => { return response.json(); })
-        .then(user => {
-            currentUser = user;
-            if (user && user.username.length > 0) {
-                accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
-                if (user.admin) {
-                    document.getElementById("pushToServer").style.display = "block";
-                }    
-                window.addEventListener('online', updateOnlineStatus);
-                window.addEventListener('offline', updateOnlineStatus);
-                updateOnlineStatus();
-            } else {
-                document.location = "signin.html";
-            }
-        }).catch(function () { document.location = "signin.html"; })
+    if (Authentication.isAdmin()) {
+        document.getElementById("pushToServer").style.display = "block";
+    }    
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
 }
 
 var table;

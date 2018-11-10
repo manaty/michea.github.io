@@ -92,6 +92,7 @@ input[type="text"] {
   <link rel="stylesheet" type="text/css" href="./css/reboot.scss"/>
   <link rel="stylesheet" type="text/css" href="./css/vanilla-dataTables.css"/>
   <link href="./css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+  <script src="./lib/auth.js"></script>
   <script src="./lib/DataStore.js"></script>
   <script src="./lib/ConfigurationStore.js"></script> 
   <script src="./lib/OrderStore.js"></script> 
@@ -100,11 +101,13 @@ input[type="text"] {
   <script src="./lib/dateformat.js"></script> 
 </head>
 <body>
-    <div style="display:flex">
-        <div style="margin-left:10px"><a href="index.html">POS</a></div>
-        <div style="margin-left:10px"><a href="catalog.html">Catalog</a></div>
-    </div>
-
+    <div style="display:block">
+      <span id="dateTime"></span>
+      <span style="margin-left:10px"><a href="index.html">POS</a></span>
+      <span style="margin-left:10px"><a href="catalog.html">Catalog</a></span>
+      <span style="margin-left:10px"><a href="purchases.html">Purchases</a></span>
+      <span style="margin-left:10px" id="accountDiv"></span>
+    </div>  
     <table class="orderTable"></table>
 
     

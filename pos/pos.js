@@ -1,4 +1,5 @@
 
+
 var totalPriceElmt = document.getElementById("totalPrice");
 var totalPaidElmt = document.getElementById("totalPaid");
 var totalChangeElmt = document.getElementById("totalChange");
@@ -37,6 +38,13 @@ var printReceiptButton = document.getElementById('printReceiptButton');
 var categoriesDiv = document.getElementById("categoriesDiv");
 var accountDiv = document.getElementById("accountDiv");
 
+let username=Authentication.getUsername();
+console.log("pos username="+username);
+if(username){
+        accountDiv.innerHTML = username + ' <button onclick="Authentication.signout()">Sign Out</button>';
+} else {
+        document.location = "signin.html";
+}
 
 var dataStore = new DataStore("micheapos");
 var configurationStore = new ConfigurationStore(dataStore);
@@ -49,12 +57,6 @@ dataStore.openDatabase(init);
 
 var productCategories = new Array();
 var allCategories = new Array();
-var loggedUser;
-
-function signout() {
-    navigator.serviceWorker.controller.postMessage({ 'action': 'signout' });
-    setTimeout(function () { document.location = "index.html"; }, 1000);
-}
 
 function init() {
     setInterval(function () {
@@ -78,17 +80,7 @@ function init() {
         buildCategoriesDiv(productCategories, null);
         selectCategory(null);
     })
-    fetch("/pos/userInfo").then(response => {
-        return response.json();
-    }).then(user => {
-            if (user && user.username.length > 0) {
-                loggedUser=user;
-                accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
-            } else {
-                console.log("received invalid userinfo => go signin");
-                document.location = "signin.html";
-            }
-        }).catch(function () { document.location = "signin.html"; })
+    
 }
 
 var previousSelectedCategory = undefined;

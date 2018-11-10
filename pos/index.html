@@ -140,7 +140,7 @@ button {
 
         window.onload = function (e) {
             navigator.serviceWorker.register('service-worker.js');
-            Promise.all(["lib/DataStore.js", "lib/ConfigurationStore.js"
+            Promise.all(["lib/auth.js","lib/DataStore.js", "lib/ConfigurationStore.js"
                 , "lib/ProductStore.js", "lib/ProductCategoryStore.js", "lib/OrderStore.js"
                 , "lib/PurchaseStore.js", "lib/InventoryStore.js","lib/JsBarcode.min.js", "printReceipt.js"].map(loadScript)).then(
                     function () {

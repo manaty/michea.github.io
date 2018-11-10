@@ -1,8 +1,6 @@
-
 var totalPriceElmt=document.getElementById("totalPrice");
-
 var cancelledPurchaseNumberTR=document.getElementById("cancelledPurchaseNumberTR");
-
+ 
 var cart=document.getElementById("cart");
 var productCodeButton = document.getElementById("productNumber");
 var manualProductCodeButton = document.getElementById("manualProductNumber");
@@ -24,7 +22,13 @@ purchaseSearchButton.addEventListener("keydown", function(event) {
 });
 
 var closeButton=document.getElementById('closeButton');
-
+var accountDiv = document.getElementById("accountDiv");
+let username=Authentication.getUsername();
+if(username){
+    accountDiv.innerHTML = username + ' <button onclick="Authentication.signout()">Sign Out</button>';
+} else {
+    document.location = "signin.html";
+}
 
 var dataStore = new DataStore("micheapos");
 var configurationStore = new ConfigurationStore(dataStore);
@@ -36,9 +40,10 @@ dataStore.openDatabase(init);
 
 
 function init(){
-    setInterval(function(){
-    document.getElementById("dateTime").innerHTML=new Date();
-    },1000);
+    setInterval(function () {
+        let curTime=new Date();
+        document.getElementById("dateTime").innerHTML = curTime.toLocaleTimeString();
+    }, 1000);
     purchaseStore.init(resetGui);
 }
 
@@ -50,6 +55,7 @@ function updateTotalPrice(){
     } else {
         closeButton.style.display='none';
     }
+
 }
 
 var lastProductUpdate=0;

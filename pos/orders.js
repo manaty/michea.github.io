@@ -3,6 +3,12 @@ var configurationStore = new ConfigurationStore(dataStore);
 var orderStore = new OrderStore(dataStore);
 var inventoryStore = new InventoryStore(dataStore);
 var orderNumberToDelete = document.getElementById("orderNumberToDelete");
+let username=Authentication.getUsername();
+if(username){
+    accountDiv.innerHTML = username + ' <button onclick="Authentication.signout()">Sign Out</button>';
+} else {
+    document.location = "signin.html";
+}
 dataStore.openDatabase(init);
 
 function init(){

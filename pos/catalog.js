@@ -3,28 +3,26 @@ var currentUser = null;
 var dataStore = new DataStore("micheapos");
 var configurationStore = new ConfigurationStore(dataStore);
 var productStore = new ProductStore(dataStore);
-var accountDiv = document.getElementById("accountDiv");
-dataStore.openDatabase(init);
-
-function signout() {
-    navigator.serviceWorker.controller.postMessage({ 'action': 'signout' });
-    setTimeout(function () { document.location = "index.html"; }, 1000);
+var accountDiv = document.getElementById("accountDiv");    
+let username=Authentication.getUsername();
+if(username){
+    accountDiv.innerHTML = username + ' <button onclick="Authentication.signout()">Sign Out</button>';
+    if (Authentication.admin) {
+        document.getElementById("pushToServer").style.display = "block";
+    }
+} else {
+    document.location = "signin.html";
 }
 
+dataStore.openDatabase(init);
+
 function init() {
+    setInterval(function () {
+        let curTime=new Date();
+        document.getElementById("dateTime").innerHTML = curTime.toLocaleTimeString();
+    }, 1000);
     productStore.listProductAsRows(createProductTable);
-    fetch("/pos/userInfo").then(response => { return response.json(); })
-        .then(user => {
-            currentUser = user;
-            if (user && user.username.length > 0) {
-                accountDiv.innerHTML = user.username + ' <button onclick="signout()">Sign Out</button>';
-                if (user.admin) {
-                    document.getElementById("pushToServer").style.display = "block";
-                }
-            } else {
-                document.location = "signin.html";
-            }
-        }).catch(function () { document.location = "signin.html"; })
+
 }
 
 var table;
