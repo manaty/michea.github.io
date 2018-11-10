@@ -236,7 +236,7 @@ function updateOnlineStatus(event) {
         if ((Date.now() - lastCategoriesCheck) > categoriesCheckDelay) {
             willCheckCategoriesLater = false;
             console.log('online, checking categories');
-            let githubAccess=new GithubContentsApiV3(github_owner,github_repo,currentUser.username, currentUser.password);
+            let githubAccess=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(), currentUser.password);
             githubAccess.retrieveGithubFileSha("pos/data/catalog/categories.csv").then((resp) => {
                     if(fileSha != resp.sha){
                         fileSha = resp.sha;
