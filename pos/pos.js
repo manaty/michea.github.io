@@ -1,6 +1,5 @@
 var posVersion="1.0";
 var machineAccreditationNumber="TBD";
-var salesTax=0.12;
 
 var totalPriceElmt = document.getElementById("totalPrice");
 var totalPaidElmt = document.getElementById("totalPaid");

@@ -1,3 +1,4 @@
+
 class OrderItem{
     construtor(){
         this.unitPrice=0;
@@ -53,7 +54,7 @@ class PaymentRecord{
 }
 
 class Order{
-    constructor(orderNumber,grandTotal){
+    constructor(orderNumber){
         this.orderNumber=orderNumber;
         this.date= new Date();
         this.items=new Array();
@@ -63,14 +64,13 @@ class Order{
         this.totalPrice=0;
         this.totalPriceNoTax=0;
         this.status="open";
-        this.grandTotal=grandTotal;
         this.cancelledOrderNumber=null;
         this.ammendingOrderNumber=null;
         this.lastUpdate=null;
     }
 
     static deserializeJson(val){
-        let o = new Order(val.orderNumber,val.grandTotal);
+        let o = new Order(val.orderNumber);
         o.date= val.date;
         if(val.items){
             o.items=val.items.map(function(itemJson){return OrderItem.deserializeJson(itemJson);});
@@ -114,7 +114,6 @@ class Order{
         let index=this.items.push(result);
         result.index=index-1;
         this.totalPrice+=result.price;
-        this.totalPriceNoTax=this.totalPrice/(1+salesTax);
         this.lastUpdate=new Date();
         return result;
     }
@@ -232,17 +231,20 @@ class OrderStore{
         openCursorRequest.onsuccess = (function (event) {
             let cursor = event.target.result;
             if (cursor) {
-                this.currentOrder=Order.deserializeJson(cursor.value);
-                this.grandTotal=this.currentOrder.grandTotal;
-                this.orderIndex = this.currentOrder.orderNumber; 
-                if(cursor.value.status!="open"){
+                let order=Order.deserializeJson(cursor.value);
+                this.grandTotal+=order.totalPrice;
+                if(this.currentOrder==null){
+                    this.currentOrder=order;
+                    this.orderIndex = this.currentOrder.orderNumber; 
+                    if(cursor.value.status!="open"){
+                        this.currentOrder=this.newOrder();
+                    }
+                }
+                cursor.continue();
+            } else if(callback){
+                if(this.currentOrder==null){
                     this.currentOrder=this.newOrder();
                 }
-                if(callback){
-                    callback();
-                }
-            } else if(callback){
-                this.currentOrder=this.newOrder();
                 callback();
             }
         }).bind(this);
@@ -352,14 +354,13 @@ class OrderStore{
 
     closeOrder(order,callback){
         order.status="paid";
-        order.grandTotal+=order.totalPrice;
         order.date= new Date();
+        order.totalPriceNoTax=+(Math.round(order.totalPrice/1.12+ "e+2")  + "e-2");
         let transaction = this.dataStore.database.transaction(this.name,'readwrite');
         let orderStore = transaction.objectStore(this.name);
         let orderRequest=orderStore.put(order);
         orderRequest.onsuccess=(function(){
-                //console.log('order successfully closed');
-                this.grandTotal+=order.grandTotal;
+                this.grandTotal+=order.totalPrice;
                 if(callback){
                     callback(order);
                 }
@@ -374,7 +375,7 @@ class OrderStore{
         if(this.currentOrder && (this.currentOrder.status=="open")){
             throw "current order is still open";
         }
-        let order=new Order(++this.orderIndex,this.grandTotal);
+        let order=new Order(++this.orderIndex);
         this.storeOrder(order,null);
         return order;
     }
