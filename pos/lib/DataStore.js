@@ -7,6 +7,7 @@ class DataStore{
 
     addStore(store){
         this.stores.push(store);
+        return this;
     }
 
     openDatabase(callback){

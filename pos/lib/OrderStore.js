@@ -53,7 +53,7 @@ class PaymentRecord{
 }
 
 class Order{
-    constructor(orderNumber){
+    constructor(orderNumber,grandTotal){
         this.orderNumber=orderNumber;
         this.date= new Date();
         this.items=new Array();
@@ -61,14 +61,16 @@ class Order{
         this.totalPaid=0;
         this.totalChange=0;
         this.totalPrice=0;
+        this.totalPriceNoTax=0;
         this.status="open";
+        this.grandTotal=grandTotal;
         this.cancelledOrderNumber=null;
         this.ammendingOrderNumber=null;
         this.lastUpdate=null;
     }
 
     static deserializeJson(val){
-        let o = new Order(val.orderNumber);
+        let o = new Order(val.orderNumber,val.grandTotal);
         o.date= val.date;
         if(val.items){
             o.items=val.items.map(function(itemJson){return OrderItem.deserializeJson(itemJson);});
@@ -81,11 +83,20 @@ class Order{
         o.totalPaid=val.totalPaid;
         o.totalChange=val.totalChange;
         o.totalPrice=val.totalPrice;
+        o.totalPriceNoTax=val.totalPriceNoTax;
         o.status=val.status;
         o.canceledOrderNumber=val.canceledOrderNumber;
         o.ammendingOrderNumber=val.ammendingOrderNumber;
         o.lastUpdate=val.lastUpdate;
         return o;
+    }
+
+    static toCSV(order){
+        return [order.orderNumber,formatDateCSV(order.date),order.items.map(function(item){
+            return item.description+'['+item.quantity+']'+item.price;
+        }).join(":"),order.totalPrice,order.totalPriceNoTax,order.status,
+        (order.cancelledOrderNumber==null?'':order.cancelledOrderNumber)
+        +''+(order.ammendingOrderNumber==null?'':order.ammendingOrderNumber)].join(",");
     }
 
     static toRow(order){
@@ -94,7 +105,6 @@ class Order{
         }).join(","),order.totalPrice,order.totalPaid,order.totalChange,order.status,
         (order.cancelledOrderNumber==null?'':order.cancelledOrderNumber)
         +''+(order.ammendingOrderNumber==null?'':order.ammendingOrderNumber)]
-
     }
 
     addItem(product,quantity){
@@ -104,6 +114,7 @@ class Order{
         let index=this.items.push(result);
         result.index=index-1;
         this.totalPrice+=result.price;
+        this.totalPriceNoTax=this.totalPrice/(1+salesTax);
         this.lastUpdate=new Date();
         return result;
     }
@@ -195,13 +206,22 @@ class Order{
 
 class OrderStore{
     constructor(dataStore) {
-        //console.log("create order store class instance");
+        //console.log("create order store class instance")
         this.name='Order';
         this.keyPath='orderNumber'
+        this.indexDefinitions=new Array();
+        this.indexDefinitions.push({
+            name:"dateIndex",
+            keyName:"date",
+            params: {
+                unique:false
+            }
+        })
         dataStore.addStore(this);
         this.dataStore=dataStore;
         this.orderIndex=Number.parseInt("1"+new Date().getFullYear().toString().substr(-2)+"00000");
         this.currentOrder=null;
+        this.grandTotal=0;
     }
 
     init(callback){
@@ -213,6 +233,7 @@ class OrderStore{
             let cursor = event.target.result;
             if (cursor) {
                 this.currentOrder=Order.deserializeJson(cursor.value);
+                this.grandTotal=this.currentOrder.grandTotal;
                 this.orderIndex = this.currentOrder.orderNumber; 
                 if(cursor.value.status!="open"){
                     this.currentOrder=this.newOrder();
@@ -225,6 +246,34 @@ class OrderStore{
                 callback();
             }
         }).bind(this);
+    }
+
+    toCSV(orders){
+        let result=""
+        for(let order of orders){
+            result+=Order.toCSV(order)+"\n";
+        }
+        return result;
+    }
+
+    listOrderForDate(formatJSON,date,callback){
+        let toDate=new Date(date);
+        toDate.setDate(date.getDate() + 1);
+        let transaction = this.dataStore.database.transaction(this.name,'readonly');
+        let orderStore = transaction.objectStore(this.name);
+        var index = orderStore.index("dateIndex");
+        let openCursorRequest = index.openCursor(IDBKeyRange.bound(date, toDate));
+        let orders=new Array();
+        openCursorRequest.onsuccess = function (event) {
+            let cursor = event.target.result;
+            if (cursor && cursor.value.status!="open"){
+                orders.push(cursor.value);
+                cursor.continue();
+            }
+            else {
+                callback(orders,formatJSON,date);
+            }
+        };
     }
 
     listOrders(callback){
@@ -303,16 +352,18 @@ class OrderStore{
 
     closeOrder(order,callback){
         order.status="paid";
+        order.grandTotal+=order.totalPrice;
         order.date= new Date();
         let transaction = this.dataStore.database.transaction(this.name,'readwrite');
         let orderStore = transaction.objectStore(this.name);
         let orderRequest=orderStore.put(order);
-        orderRequest.onsuccess=function(){
+        orderRequest.onsuccess=(function(){
                 //console.log('order successfully closed');
+                this.grandTotal+=order.grandTotal;
                 if(callback){
                     callback(order);
                 }
-        };
+        }).bind(this);
         orderRequest.onerror=function(){
                 console.log("error while closing the order: "+orderRequest.error);
         };
@@ -323,7 +374,7 @@ class OrderStore{
         if(this.currentOrder && (this.currentOrder.status=="open")){
             throw "current order is still open";
         }
-        let order=new Order(++this.orderIndex);
+        let order=new Order(++this.orderIndex,this.grandTotal);
         this.storeOrder(order,null);
         return order;
     }

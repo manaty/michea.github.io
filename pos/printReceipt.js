@@ -1,6 +1,7 @@
 var receiptCss = "html,body{width:48mm;margin:0px;font-family: Arial, Helvetica, sans-serif;font-size: 3.6mm;} "
 +".price_table{width:48mm;table-layout: fixed;border-spacing: 0px;} "
 +".price_td{text-align: right;} "
++".announce{font-size: 2mm;}"
 +".amnt_td{width: 6mm;text-align: center;} "
 +".desc_td{width: 26mm;white-space: nowrap;overflow: hidden;text-align: left;}";
 
@@ -9,7 +10,6 @@ var receiptLogo="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjAAAAEgCAAAAACPp
 var receipt;
 
 function printReceipt() {
-    let barcode= 
     paymentDiv.style.display = 'none';
     categoriesDiv.style.display = 'flex';
     orderStore.closeOrder(orderStore.currentOrder);
@@ -27,6 +27,7 @@ function printReceipt() {
     mywindow.document.write('<div><br/><span id="currentDateTime" style="text-align: right;width: 100%">' +
         formatAMPM(orderStore.currentOrder.date) + '</span><br/>');
     mywindow.document.write('ORD# <span id="orderNumber">' + orderStore.currentOrder.orderNumber + '</span><br/>');
+    mywindow.document.write('ACC# <span id="accreditationNumber">' + machineAccreditationNumber + '</span><br/>');
     if (orderStore.currentOrder.cancelledOrderNumber) {
         mywindow.document.write(' Cancelled# ' + orderStore.currentOrder.cancelledOrderNumber + '<br/>');
     }
@@ -63,7 +64,7 @@ function printReceipt() {
 
     mywindow.document.write('</div><div style="text-align: center">');
     mywindow.document.write('<img id="barcode" style="width:80%;height:8mm"/>');
-    mywindow.document.write('Thank you, pls come again!</div>');
+    mywindow.document.write('<br/><span class="announce">THIS SERVES AS AN OFFICIAL RECEIPT</span></div>');
     mywindow.document.write('<script>JsBarcode("#barcode", ' + orderStore.currentOrder.orderNumber + ',{format: "CODE128",width:2,');
     mywindow.document.write('height:30,displayValue: false });</script>')
     mywindow.document.close(); // necessary for IE >= 10

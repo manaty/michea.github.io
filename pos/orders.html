@@ -110,9 +110,17 @@ input[type="text"] {
     </div>  
     <table class="orderTable"></table>
 
-    
+        
     <div>
-        <button onclick="orderStore.listOrders(orderListDownload)">Download</button>
+        Order grand total : <span id="grandTotal"></span> &nbsp;
+        <form name="myForm" action="">
+          Format : <input type="radio" name="format" value="csv" checked="checked">CSV
+          <input id="jsonRadio" type="radio" name="gender" value="json">JSON<br>
+          <label for="orderDate">Date:</label>
+          <input type="date" id="orderDate">
+        </form> 
+        <button onclick="daySalesDownload()">Download Day sales</button> &nbsp;
+        <button onclick="orderStore.listOrders(orderListDownload)">Download All</button>
     </div>
     <div>
       <b>Order numbers to delete</b>
