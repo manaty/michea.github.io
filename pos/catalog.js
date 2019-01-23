@@ -7,9 +7,6 @@ var accountDiv = document.getElementById("accountDiv");
 let username=Authentication.getUsername();
 if(username){
     accountDiv.innerHTML = username + ' <button onclick="Authentication.signout()">Sign Out</button>';
-    if (Authentication.admin) {
-        document.getElementById("pushToServer").style.display = "block";
-    }
 } else {
    // document.location = "signin.html";
 }
@@ -18,6 +15,19 @@ dataStore.openDatabase(init);
 
 function init() {
     productStore.listProductAsRows(createProductTable);
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+}
+
+function updateOnlineStatus(event) {
+    if (navigator.onLine && Authentication.isAdmin()) {
+            document.getElementById("pushToServer").style.display = "block";
+            document.getElementById("getFromServer").style.display = "block";
+    } else {
+        document.getElementById("pushToServer").style.display = "hidden";
+        document.getElementById("getFromServer").style.display = "hidden";
+    }
 }
 
 var table;
@@ -273,63 +283,27 @@ var github_owner="manaty";
 var github_repo = "michea.github.io";
 var productFileSha=null;
 var previousProducts=null;
-
+var githubAPI=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(),Authentication.getToken());
+        
 function pushFile(products) {
-    if (currentUser.admin) {
+    if (navigator.onLine) {
         let xls = new XlsExport(products, "Product List");
         let content = XlsExport.toBase64(xls.objectToSemicolons());
         if(!productFileSha){
-            retrieveGithubFileSha(github_owner,github_repo,currentUser.username,currentUser.password,content,"pos/data/catalog/products.csv");
+            githubAPI.retrieveGithubFile("pos/data/catalog/products.csv").then(resp => { 
+                if(!resp.type=="file"){
+                    console.log("expected response is not a file, resp="+JSON.stringify(resp));
+                    alert("Error while accessing the file on server, contact admin");
+                } else {
+                    productFileSha=resp.sha;
+                    previousProducts=XlsExport.fromBase64(resp.content);
+                    console.log("previousProducts="+previousProducts);
+                    pushFile(products);
+                    
+                }
+            })
         }
-        else updateGithubFile(github_owner,github_repo,currentUser.username,currentUser.password,content,"pos/data/catalog/products.csv",productFileSha);
-    }
-}
-
-function retrieveGithubFileSha(owner,repo,username,password,content,path){
-    fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/"+path, {
-        method: 'GET',
-        mode: 'cors',
-        headers:{
-            'User-Agent': username,
-            'Accept': 'application/vnd.github.v3+json',
-            'Authorization': 'token ' + password
-        }
-    })
-    .then(response => response.json()).then(resp => { 
-        if(!resp.type=="file"){
-            console.log("expected response is not a file, resp="+JSON.stringify(resp));
-            alert("Error while accessing the file on server, contact admin");
-        } else {
-            productFileSha=resp.sha;
-            previousProducts=XlsExport.fromBase64(resp.content);
-            console.log("previousProducts="+previousProducts);
-            updateGithubFile(owner,repo,username,password,content,path,productFileSha);
-        }
-    })
-    .catch((e)=>{
-        console.log("Error while retrieving productList "+e);
-        alert("Error while retrieving productList");
-    })
-}
-
-function updateGithubFile(owner,repo,username,password,content,path,sha){
-        console.log("content="+content);
-        fetch("https://api.github.com/repos/" + owner + "/" + repo + "/contents/"+path, {
-            method: 'PUT',
-            mode: 'cors',
-            body: JSON.stringify({
-                'path': path,
-                'message': 'update product list',
-                'content': content,
-                'sha':sha
-            }),
-            headers:{
-                'User-Agent': username,
-                'Accept': 'application/vnd.github.v3+json',
-                'Authorization': 'token ' + password
-            }
-        })
-        .then(response => response.json()).then(resp => { 
+        else githubAPI.updateGithubFile(content,"pos/data/catalog/products.csv",productFileSha).then(resp => { 
             console.log("received response"+JSON.stringify(resp));
             if(!resp.content){
                 productFileSha=resp.content.sha;
@@ -337,9 +311,32 @@ function updateGithubFile(owner,repo,username,password,content,path,sha){
             } else {
                 alert("error while pushing file :"+resp.message);
             }
-        })
-        .catch((e)=>{
-            console.log("Error while updating productList "+e);
-            alert("Error while updating productList",e);
-        })
+        });
+    }
+}
+
+function getFile(){
+    if (navigator.onLine) {
+        let xls = new XlsExport(products, "Product List");
+        let content = XlsExport.toBase64(xls.objectToSemicolons());
+        githubAPI.retrieveGithubFile("pos/data/catalog/products.csv").then(resp => { 
+                if(!resp.type=="file"){
+                    console.log("expected response is not a file, resp="+JSON.stringify(resp));
+                    alert("Error while accessing the file on server, contact admin");
+                } else {
+                    let products=XlsExport.fromBase64(resp.content);
+                    var json = Papa.parse(products,
+                        {
+                            header: true,
+                            complete: function (results, file) {
+                                console.log("Parsing complete:", results, file);
+                                if (results.data) {
+                                    productStore.storeProductArray(results.data,
+                                        function (successes, errors) { alert("imported " + successes + " product, ignored " + errors) });
+                                }
+                            }
+                        })
+                }
+            })
+        }
 }

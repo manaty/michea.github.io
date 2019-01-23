@@ -106,6 +106,7 @@ input[type="text"] {
     width: 0;
   }
   </style>
+  <link rel="manifest" href="./manifest.json" />
   <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css"/>
   <link rel="stylesheet" type="text/css" href="./css/vanilla-dataTables.css"/>
   <link href="./css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
@@ -137,6 +138,7 @@ input[type="text"] {
       <button onclick="productStore.listProducts(excelExport)">Download CSV</button>
       <button onclick="printPriceTags()">Print price tags</button>
       <button id="pushToServer" onclick="productStore.listProducts(pushFile)" style="display:none">Push to server</button>
+      <button id="getFromServer" onclick="getFile()" style="display:none">Get from server</button>
     </div>
     <div>
       <b>Import CSV File</b>

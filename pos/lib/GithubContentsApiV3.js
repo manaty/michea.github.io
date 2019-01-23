@@ -6,7 +6,7 @@ class GithubContentsApiV3 {
         this.password=password;
     }
 
-    retrieveGithubFileSha(path) {
+    retrieveGithubFile(path) {
         return new Promise((resolve, reject) => {
             fetch("https://api.github.com/repos/" + this.owner + "/" + this.repo + "/contents/" + path, {
                 method: 'GET',

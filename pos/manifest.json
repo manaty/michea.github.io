@@ -11,7 +11,7 @@
           "sizes": "512x512",
           "type": "image/png"
         }],
-    "start_url": "index.html?utm_source=a2hs",
+    "start_url": "/pos/index.html?utm_source=a2hs",
     "display": "standalone",
     "background_color": "#3E4EB8",
     "scope": "./",
