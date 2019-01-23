@@ -17,7 +17,6 @@ var allCategories = new Array();
 var categoriesCheckDelay = 3600 * 1000; //one hour
 var lastCategoriesCheck = new Date(Date.now() - categoriesCheckDelay * 2); //set to 2 hours ago
 var willCheckCategoriesLater = false;
-var currentUser=null;
 
 function init() {
     productCategoryStore.listProductCategoriesAsRows(createProductCategoryTable);
@@ -236,7 +235,7 @@ function updateOnlineStatus(event) {
         if ((Date.now() - lastCategoriesCheck) > categoriesCheckDelay) {
             willCheckCategoriesLater = false;
             console.log('online, checking categories');
-            let githubAccess=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(), currentUser.password);
+            let githubAccess=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(), Authentication.getToken());
             githubAccess.retrieveGithubFileSha("pos/data/catalog/categories.csv").then((resp) => {
                     if(fileSha != resp.sha){
                         fileSha = resp.sha;
@@ -273,10 +272,10 @@ function updateOnlineStatus(event) {
 }
 
 function pushFile(productCategories) {
-    if (currentUser.admin && fileSha) {
+    if (Authentication.isAdmin() && fileSha) {
         let xls = new XlsExport(productCategories, "Product Category List");
         let content = XlsExport.toBase64(xls.objectToSemicolons());
-        let githubAccess=new GithubContentsApiV3(github_owner,github_repo,currentUser.username, currentUser.password);
+        let githubAccess=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(), Authentication.getToken());
         githubAccess.updateGithubFile("pos/data/catalog/categories.csv",content, fileSha).then((resp)=>{
             console.log("received response" + JSON.stringify(resp));
             if (!resp.content) {
