@@ -278,7 +278,7 @@ function pushFile(productCategories) {
         let githubAccess=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(), Authentication.getToken());
         githubAccess.updateGithubFile("pos/data/catalog/categories.csv",content, fileSha).then((resp)=>{
             console.log("received response" + JSON.stringify(resp));
-            if (!resp.content) {
+            if (resp.content) {
                 fileSha = resp.content.sha;
                 alert("pushed file: " + resp.content.name);
             } else {
