@@ -21,6 +21,7 @@ function init() {
         allCategories = allcategories;
     });
     if (Authentication.isAdmin()) {
+        document.getElementById("getFromServer").style.display = "block";
         document.getElementById("pushToServer").style.display = "block";
     }   
 }
