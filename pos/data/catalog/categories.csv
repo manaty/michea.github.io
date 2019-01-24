@@ -1,4 +1,6 @@
 code;description;parentCategory;order
+beer;beer;drinks;1
+cakes;cakes;food;1
 coffee;coffee;drinks;1
 drinks;drinks;;1
 food;food;;1
