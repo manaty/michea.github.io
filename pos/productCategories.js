@@ -13,10 +13,6 @@ var productCategories = new Array();
 var allCategories = new Array();
 
 
-//TODO: get it from a PropertyStore
-var categoriesCheckDelay = 3600 * 1000; //one hour
-var lastCategoriesCheck = new Date(Date.now() - categoriesCheckDelay * 2); //set to 2 hours ago
-var willCheckCategoriesLater = false;
 
 function init() {
     productCategoryStore.listProductCategoriesAsRows(createProductCategoryTable);
@@ -26,10 +22,7 @@ function init() {
     });
     if (Authentication.isAdmin()) {
         document.getElementById("pushToServer").style.display = "block";
-    }    
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus();
+    }   
 }
 
 var table;
@@ -229,45 +222,34 @@ var github_repo = "michea.github.io";
 var fileSha = null;
 var previousCategories = null;
 
-function updateOnlineStatus(event) {
+function getFile() {
     if (navigator.onLine) {
         // handle online status
-        if ((Date.now() - lastCategoriesCheck) > categoriesCheckDelay) {
-            willCheckCategoriesLater = false;
-            console.log('online, checking categories');
-            let githubAccess=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(), Authentication.getToken());
-            githubAccess.retrieveGithubFile("pos/data/catalog/categories.csv").then((resp) => {
-                    if(fileSha != resp.sha){
-                        fileSha = resp.sha;
-                        previousCategories = XlsExport.fromBase64(resp.content);
-                        Papa.parse(previousCategories,
-                            {
-                                header: true,
-                                complete: function (results, file) {
-                                    if (results.data) {
-                                        console.log("storing categories:" + results.data);
-                                        productCategoryStore.storeProductCategoryArray(results.data,
-                                            function (successes, errors) {
-                                                alert("imported " + successes + " categories, ignored " + errors);
-                                                table.render();
-                                            });
+        let githubAccess=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(), Authentication.getToken());
+        githubAccess.retrieveGithubFile("pos/data/catalog/categories.csv").then((resp) => {
+                if(fileSha != resp.sha){
+                    fileSha = resp.sha;
+                    previousCategories = XlsExport.fromBase64(resp.content);
+                    Papa.parse(previousCategories,
+                        {
+                            header: true,
+                            complete: function (results, file) {
+                                if (results.data) {
+                                    console.log("storing categories:" + results.data);
+                                    productCategoryStore.storeProductCategoryArray(results.data,
+                                        function (successes, errors) {
+                                            alert("imported " + successes + " categories, ignored " + errors);
+                                            table.render();
+                                        });
                                     }
                                 }
                             }
                         )
                     }
                 }
-            ).catch((e) => { alert(e) });
-        } else {
-            console.log('online but it not yet time to check if the categories have been updated');
-            if (!willCheckCategoriesLater) {
-                willCheckCategoriesLater = true;
-                setTimeout(updateOnlineStatus, timeout);
-            }
-        }
+        ).catch((e) => { alert(e) });
     } else {
-        // handle offline status
-        console.log('offline');
+        alert('Please connect to internet to push file');
     }
 }
 
