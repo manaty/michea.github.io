@@ -317,8 +317,6 @@ function pushFile(products) {
 
 function getFile(){
     if (navigator.onLine) {
-        let xls = new XlsExport(products, "Product List");
-        let content = XlsExport.toBase64(xls.objectToSemicolons());
         githubAPI.retrieveGithubFile("pos/data/catalog/products.csv").then(resp => { 
                 if(!resp.type=="file"){
                     console.log("expected response is not a file, resp="+JSON.stringify(resp));
