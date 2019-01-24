@@ -44,7 +44,8 @@ console.log("pos username="+username);
 if(username){
         accountDiv.innerHTML = username + ' <button onclick="Authentication.signout()">Sign Out</button>';
 } else {
-        document.location = "signin.html";
+    accountDiv.innerHTML = username + ' <a href="signin.html">Sign In</a>';
+    document.getElementById("mainDiv").style.display="none";
 }
 
 var dataStore = new DataStore("micheapos");
@@ -301,6 +302,9 @@ function newOrder() {
 }
 
 function resetGui() {
+    if(!Authentication.getUsername()){
+        return;
+    }
     document.getElementById('orderNumber').innerHTML = orderStore.currentOrder.orderNumber;
     document.getElementById('cancelledOrderNumber').innerHTML = orderStore.currentOrder.cancelledOrderNumber;
     cart.innerHTML = "";

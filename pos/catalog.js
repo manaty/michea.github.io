@@ -322,6 +322,7 @@ function getFile(){
                     console.log("expected response is not a file, resp="+JSON.stringify(resp));
                     alert("Error while accessing the file on server, contact admin");
                 } else {
+                    if(resp.content){
                     let products=XlsExport.fromBase64(resp.content);
                     var json = Papa.parse(products,
                         {
@@ -334,6 +335,9 @@ function getFile(){
                                 }
                             }
                         })
+                    } else {
+                        alert(resp.message);
+                    }
                 }
             })
         }
