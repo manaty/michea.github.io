@@ -22,7 +22,7 @@ class Authentication{
     }
 
     static isAdmin(){
-        return sessionStorage.getItem("isadmin");
+        return sessionStorage.getItem("isadmin")=='true';
     }
 
 
