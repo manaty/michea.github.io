@@ -236,7 +236,7 @@ function updateOnlineStatus(event) {
             willCheckCategoriesLater = false;
             console.log('online, checking categories');
             let githubAccess=new GithubContentsApiV3(github_owner,github_repo,Authentication.getUsername(), Authentication.getToken());
-            githubAccess.retrieveGithubFileSha("pos/data/catalog/categories.csv").then((resp) => {
+            githubAccess.retrieveGithubFile("pos/data/catalog/categories.csv").then((resp) => {
                     if(fileSha != resp.sha){
                         fileSha = resp.sha;
                         previousCategories = XlsExport.fromBase64(resp.content);
